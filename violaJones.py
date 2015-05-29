@@ -18,11 +18,11 @@ for (x,y,w,h) in faces:
 
     roi_gray = gray[y:y+h, x:x+w]
     #pdb.set_trace()
-    #roi_color = img[y:y+h, x:x+w]
+    roi_color = img[y:y+h, x:x+w]
     eyes = eye_cascade.detectMultiScale(roi_gray)
     for (ex,ey,ew,eh) in eyes:
     	pass
-        #cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+        cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
 
 #pdb.set_trace()
 cv2.imshow('img',img)
