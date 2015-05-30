@@ -47,7 +47,7 @@ for (x,y,w,h) in faces:
     midPoint[2][0] = nx+nw/2;
     midPoint[2][1] = ny+nh/2;
 
-pdb.set_trace()
+#pdb.set_trace()
 symmetricalLine = cv2.fitLine(midPoint, cv2.cv.CV_DIST_L1, 0, 0.01, 0.01)
 cv2.imshow('img',img)
 cv2.waitKey(0)
