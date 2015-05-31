@@ -56,6 +56,9 @@ for (x,y,w,h) in faces:
     midPoint[5] = ny+nh/2;
 
 #pdb.set_trace()
+<<<<<<< HEAD
+symmetricalLine = cv2.fitLine(midPoint, cv2.cv.CV_DIST_L1, 0, 0.01, 0.01)
+=======
 #for i in range (0,5):
 midPointDebug = midPoint.reshape(4,2);
 [vx,vy,x,y] = cv2.fitLine(midPointDebug, cv2.cv.CV_DIST_L1, 0, 0.01, 0.01)
@@ -72,8 +75,13 @@ y3=y-60
 #y2 = y + (math.sin(theta))*distance
 x2 = np.around(x2)
 y2 = np.around(y2)
+<<<<<<< HEAD
 cv2.line(img,(x,y),(x2,y2),(255,0,0),2)
 cv2.line(img,(x,y),(x3,y3),(255,0,0),2)
+=======
+cv2.line(img,(x,y),(x2,y2),(255,0,0),5)
+>>>>>>> 3351ebd2a3bf8f7d571edc062243f5c30d7be523
+>>>>>>> 74d40078a9f1ddc77bc8140ff18f781941d55855
 cv2.imshow('img',img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
