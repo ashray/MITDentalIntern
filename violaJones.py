@@ -82,6 +82,7 @@ cv2.line(img,(x,y),(x3,y3),(255,0,0),2)
 cv2.line(img,(x,y),(x2,y2),(255,0,0),5)
 >>>>>>> 3351ebd2a3bf8f7d571edc062243f5c30d7be523
 >>>>>>> 74d40078a9f1ddc77bc8140ff18f781941d55855
+
 cv2.imshow('img',img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
