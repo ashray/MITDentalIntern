@@ -9,9 +9,9 @@ eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 mouth_cascade = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
 nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
 
-#img = cv2.imread('sampleFaceImage.png')
+img = cv2.imread('sampleFaceImage.png')
 #img = cv2.imread('sampleFaceImage2.jpg')
-img = cv2.imread('sampleFaceImage3.JPG')
+#img = cv2.imread('sampleFaceImage3.JPG')
 #----For Debugging-------
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
