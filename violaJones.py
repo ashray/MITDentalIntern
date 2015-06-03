@@ -13,8 +13,8 @@ nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
 #mouth_cascade = cv2.CascadeClassifier('mouth.xml')
 #nose_cascade = cv2.CascadeClassifier('nose18x15.xml')
 
-img = cv2.imread('./photo/image5.JPG')
-#img = cv2.imread('./photo/sampleFaceImage4.JPG')
+#img = cv2.imread('./photo/image5.JPG')
+img = cv2.imread('./photo/sampleFaceImage7.png')
 #img = cv2.imread('sampleFaceImage2.jpg')
 #img = cv2.imread('./photo/sampleFaceImage3.JPG')
 #----For Debugging-------
@@ -66,7 +66,7 @@ for (x,y,w,h) in faces:
 	    temp2 = 0;
 	    count = 0;
 	    for (ex,ey,ew,eh) in eyes:
-	        cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+		cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
 	        temp1 = temp1 + ex + ew/2;
 	        temp2 = temp2 + ey + eh/2;
 	        count = count+1;
@@ -75,7 +75,6 @@ for (x,y,w,h) in faces:
 	    if count==2:
 	    	#midPoint[2] = x+ temp1/count;
 	    	#midPoint[3] = y+ temp2/count;
-
 		midPoint.append(x+ temp1/count)
 		midPoint.append(y+ temp2/count)
 		curr_len = len(midPoint)
@@ -96,13 +95,14 @@ for (x,y,w,h) in faces:
 	    mouth = mouth_cascade.detectMultiScale(roi_gray,4,2)
 	    for (mx,my,mw,mh) in mouth:
 		count_mouth=count_mouth+1
-	        cv2.rectangle(roi_color,(mx,my),(mx+mw,my+mh),(0,0,255),2)
+	        
 	    	#midPoint[6] = mx + mw/2
 	    	#midPoint[7] = my + mh/2
 		#midPoint[6] = midPoint[6]+x;
 	        #midPoint[7] = midPoint[7]+y;
 
 	    if count_mouth==1:
+		cv2.rectangle(roi_color,(mx,my),(mx+mw,my+mh),(0,0,255),2)
 		midPoint.append(mx + mw/2 + x)
 		midPoint.append(my + mh/2 + y)
 		curr_len = len(midPoint)
@@ -118,13 +118,14 @@ for (x,y,w,h) in faces:
 	    nose = nose_cascade.detectMultiScale(roi_gray)
 	    for (nx,ny,nw,nh) in nose:
 		count_nose = count_nose+1
-	        cv2.rectangle(roi_color,(nx,ny),(nx+nw,ny+nh),(0,255,0),2)
+	        
 	    	#midPoint[4] = nx+nw/2;
 	    	#midPoint[5] = ny+nh/2;
 	        #midPoint[4] = midPoint[4]+x;
 	        #midPoint[5] = midPoint[5]+y;
 
 	    if count_nose==1:
+		cv2.rectangle(roi_color,(nx,ny),(nx+nw,ny+nh),(0,255,0),2)
 		midPoint.append(nx + nw/2 + x)
 		midPoint.append(ny + nh/2 + y)
 	        curr_len = len(midPoint)
