@@ -1,5 +1,7 @@
 OpenCV/*
 photo/*
+./idea/*
+
 *.png
 *.JPG
 *.jpeg
