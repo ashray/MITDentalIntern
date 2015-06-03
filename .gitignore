@@ -1,5 +1,8 @@
 OpenCV/*
 photo/*
+*.png
+*.JPG
+*.jpeg
 
 # Compiled source #
 ###################
