@@ -1,8 +1,8 @@
-
 import numpy as np
 import cv2
 import pdb
 import math
+from shapely.geometry import LineString
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml') 
@@ -13,10 +13,11 @@ nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
 #mouth_cascade = cv2.CascadeClassifier('mouth.xml')
 #nose_cascade = cv2.CascadeClassifier('nose18x15.xml')
 
-#img = cv2.imread('./photo/image5.JPG')
-img = cv2.imread('./photo/sampleFaceImage7.png')
+#img = cv2.imread('./photo/image11.JPG')
+#img = cv2.imread('./photo/sampleFaceImage9.png')
 #img = cv2.imread('sampleFaceImage2.jpg')
-#img = cv2.imread('./photo/sampleFaceImage3.JPG')
+img = cv2.imread('./photo/sampleFaceImage4.JPG')
+
 #----For Debugging-------
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -31,7 +32,7 @@ else:
 # pdb.set_trace();
 img = cv2.resize(img, dim)#, interpolation = cv2.INTER_AREA)
 # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
+img_copy = img.copy()
 #img2 = cv2.resize(img, img2, np.array([height, width]), b, b, cv2.INTER_LINEAR)
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -151,23 +152,50 @@ print 'NumPy array size : ', midPointNP.shape
 
 #for i in range (0,5):
 midPointDebug = midPointNP.reshape(len_list,2);
-[vx,vy,x,y] = cv2.fitLine(midPointDebug, cv2.cv.CV_DIST_L1, 0, 0.01, 0.01)
+[vx,vy,xbf,ybf] = cv2.fitLine(midPointDebug, cv2.cv.CV_DIST_L1, 0, 0.01, 0.01)
 #-----Verify this does not cause any major error-------
 #pdb.set_trace();
 
-x = np.around(x)
-y = np.around(y)
+xbf = np.around(xbf)
+ybf = np.around(ybf)
 #-------------------------------------------------------
 #Hack just to get 2 points from the direction vectors so that we can plot the line
-distance = 100;
-x2 = x+distance*vx;
-y2 = y+distance*vy;
+distance = 200;
+x2 = xbf+distance*vx;
+y2 = ybf+distance*vy;
 
-x3 = x+(-1)*distance*vx;
-y3 = y+(-1)*distance*vy;
+x3 = xbf+(-1)*distance*vx;
+y3 = ybf+(-1)*distance*vy;
 
 x2 = np.around(x2)
 y2 = np.around(y2)
+
+sub_image1 = img_copy[y:y+h, x:xbf]
+
+sub_image2 = img_copy[y:y+h, xbf:x+w]
+
+cv2.imshow('sub image 1',sub_image1)
+
+cv2.imshow('sub image 2',sub_image2)
+
+sum_image1 = cv2.sumElems(sub_image1)
+sum_image2 = cv2.sumElems(sub_image2)
+#pdb.set_trace();
+print 'Sum image 1',sum_image1
+print 'Sum image 2',sum_image2
+
+percentageDifference = math.fabs(sum_image1[1]-sum_image2[1])/max(sum_image1[1],sum_image2[1])
+
+print "Percentage asymmetry ", percentageDifference*100
+
+#    line1 = LineString((x,y), (x+w,y))
+#    line2 = LineString((xbf,ybf), (x2,y2))
+#
+#    print(line1.intersection(line2))
+
+
+
+
 
 cv2.line(img,(x3,y3),(x2,y2),(255,0,0),1)
 
