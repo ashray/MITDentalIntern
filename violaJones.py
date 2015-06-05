@@ -14,9 +14,9 @@ nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
 #nose_cascade = cv2.CascadeClassifier('nose18x15.xml')
 
 #img = cv2.imread('./photo/image11.JPG')
-#img = cv2.imread('./photo/sampleFaceImage9.png')
+img = cv2.imread('./photo/sampleFaceImage9.png')
 #img = cv2.imread('sampleFaceImage2.jpg')
-img = cv2.imread('./photo/sampleFaceImage4.JPG')
+#img = cv2.imread('./photo/sampleFaceImage4.JPG')
 
 #----For Debugging-------
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -171,20 +171,38 @@ x2 = np.around(x2)
 y2 = np.around(y2)
 
 sub_image1 = img_copy[y:y+h, x:xbf]
-
 sub_image2 = img_copy[y:y+h, xbf:x+w]
 
 cv2.imshow('sub image 1',sub_image1)
-
 cv2.imshow('sub image 2',sub_image2)
 
-sum_image1 = cv2.sumElems(sub_image1)
-sum_image2 = cv2.sumElems(sub_image2)
+# define the upper and lower boundaries of the HSV pixel
+# intensities to be considered 'skin'
+lower = np.array([0, 48, 80], dtype = "uint8")
+upper = np.array([20, 255, 255], dtype = "uint8")
+
+converted_sub1 = cv2.cvtColor(sub_image1, cv2.COLOR_BGR2HSV)
+converted_sub2 = cv2.cvtColor(sub_image2, cv2.COLOR_BGR2HSV)
+
+cv2.imshow('sub image 1',converted_sub1)
+cv2.imshow('sub image 2',converted_sub2)
+
+skinMask_sub1 = cv2.inRange(converted_sub1, lower, upper)
+skinMask_sub2 = cv2.inRange(converted_sub2, lower, upper)
+
+cv2.imshow('sub image 1',skinMask_sub1)
+cv2.imshow('sub image 2',skinMask_sub2)
+
+#        cv2.equalizeHist(sub_image1,sub_image1)
+#        cv2.equalizeHist(sub_image2,sub_image2)
+
+sum_image1 = cv2.sumElems(skinMask_sub1)
+sum_image2 = cv2.sumElems(skinMask_sub2)
 #pdb.set_trace();
 print 'Sum image 1',sum_image1
 print 'Sum image 2',sum_image2
 
-percentageDifference = math.fabs(sum_image1[1]-sum_image2[1])/max(sum_image1[1],sum_image2[1])
+percentageDifference = math.fabs(sum_image1[0]-sum_image2[0])/max(sum_image1[0],sum_image2[0])
 
 print "Percentage asymmetry ", percentageDifference*100
 
