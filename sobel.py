@@ -59,6 +59,7 @@ img3 = cv2.dilate(laplacian,erode_kernel,iterations = 1)
 cv2.imshow('dilated image',img3)
 cv2.waitKey(0)
 
+
 # plt.subplot(2,1,1),plt.imshow(img,cmap = 'gray')
 # plt.title('Original'), plt.xticks([]), plt.yticks([])
 # plt.subplot(2,1,2),plt.imshow(laplacian,cmap = 'gray')
