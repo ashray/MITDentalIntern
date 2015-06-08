@@ -5,6 +5,7 @@ CodeArchive/*
 *.png
 *.JPG
 *.jpeg
+*.pyc
 
 # Compiled source #
 ###################
