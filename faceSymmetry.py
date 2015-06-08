@@ -6,7 +6,7 @@ from image_downscale import image_downscale
 from violaJones import *
 from canny import *
 
-img = cv2.imread('sampleFaceImage.png')
+img = cv2.imread('sampleFaceImage3.jpg')
 img = image_downscale(img, 400)
 img_copy = img.copy()
 gray = colGray(img)
