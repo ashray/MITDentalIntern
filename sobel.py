@@ -1,3 +1,4 @@
+# Not using this file currently, functionality of this file moved to findBoundary.py
 import cv2
 import numpy as np
 import pdb
