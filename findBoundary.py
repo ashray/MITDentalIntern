@@ -37,7 +37,8 @@ def findBoundary(inputImage):
     storeBoundaryPoints = np.hstack((storeLeftBoundaryPoints, storeRightBoundaryPoints))
     return storeBoundaryPoints
 
-img = cv2.imread('sampleFaceImage.png',0)
+# img = cv2.imread('sampleFaceImage.png',0)
+img = cv2.imread('downscaled_image.png')
 img = cv2.GaussianBlur(img,(5,5),0)
 canny_edge = cv2.Canny(img,50,100)
 dilation_kernel = np.ones((5,5), np.uint8)
