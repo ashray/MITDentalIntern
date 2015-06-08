@@ -6,14 +6,14 @@ from image_downscale import image_downscale
 from violaJones import *
 from canny import *
 
-img = cv2.imread('sampleFaceImage3.jpg')
+img = cv2.imread('./photo/sampleFaceImage6.png')
 img = image_downscale(img, 400)
 img_copy = img.copy()
 gray = colGray(img)
 
 # midPoint = []
 # count_face, count_mouth, count_nose, count = 0, 0, 0, 0
-midPoint, x, y, w, h = faceFeatureDetector(img)#,count,count_face,count_mouth,count_nose)
+midPoint, x, y, w, h, intersection_x, intersection_y = faceFeatureDetector(img)#,count,count_face,count_mouth,count_nose)
 a = FindEdgeImage(img_copy[y:y + h, x:x+w])
 img_new = PlotPoints(a,img, x, y)
 
@@ -26,11 +26,12 @@ midPointNP = np.asarray(midPoint)
 midPointDebug = midPointNP.reshape(len_list, 2)
 
 
-xbf, ybf = draw_line(img, midPointDebug)
-sum_image1, sum_image2 = skin_detector(img_copy, x, y, w, h, xbf, ybf)
-percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
-print "Percentage asymmetry ", percentageDifference * 100
+xbf, ybf, vx, vy= draw_line(img_new, midPointDebug)
+sum_image1, sum_image2, img_new = skin_detector(img_new, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy)
 
-cv2.imshow('img', img)
+#percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
+#print "Percentage asymmetry ", percentageDifference * 100
+
+cv2.imshow('img', img_new)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

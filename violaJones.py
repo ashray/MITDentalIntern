@@ -4,6 +4,7 @@ import cv2
 import pdb
 import math
 from shapely.geometry import LineString
+from IntersectionPoint import *
 
 
 def colGray(img):
@@ -37,6 +38,8 @@ def faceFeatureDetector(img):
             # pdb.set_trace()
             # Plot center of face
             cv2.line(img, (midPoint[0], midPoint[1]), (midPoint[0], midPoint[1]), (255, 0, 0), 6)
+            curr_len = len(midPoint)
+            intersection_x, intersection_y = midPoint[curr_len-2], midPoint[curr_len-1]
 
             roi_gray = gray[y:y + h, x:x + w]
             roi_color = img[y:y + h, x:x + w]
@@ -58,6 +61,7 @@ def faceFeatureDetector(img):
                 curr_len = len(midPoint)
                 # Plot center of eyes
                 cv2.line(img, (midPoint[curr_len - 2], midPoint[curr_len - 1]), (midPoint[curr_len - 2], midPoint[curr_len - 1]), (0, 255, 0), 6)
+                intersection_x, intersection_y = midPoint[curr_len-2], midPoint[curr_len-1]
                 print midPoint[0:len(midPoint)]
 
             else:
@@ -102,7 +106,9 @@ def faceFeatureDetector(img):
         else:
             print 'Face != 1'
 
-    return midPoint, x, y, w, h
+
+
+    return midPoint, x, y, w, h, intersection_x, intersection_y
 
 
 # Resize midPoint numpy array
@@ -127,9 +133,9 @@ def draw_line(img, midPointDebug):
 
     cv2.line(img, (x3, y3), (x2, y2), (255, 0, 0), 1)
 
-    return xbf, ybf
+    return xbf, ybf, vx, vy
 
-def skin_detector(img_copy, x, y, w, h, xbf, ybf):
+def skin_detector(img_copy, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy):
 
     sub_image1 = img_copy[y:y + h, x:xbf]
     sub_image2 = img_copy[y:y + h, xbf:x + w]
@@ -144,18 +150,23 @@ def skin_detector(img_copy, x, y, w, h, xbf, ybf):
 
     converted_sub1 = cv2.cvtColor(sub_image1, cv2.COLOR_BGR2HSV)
     converted_sub2 = cv2.cvtColor(sub_image2, cv2.COLOR_BGR2HSV)
+    converted_ori = cv2.cvtColor(img_copy, cv2.COLOR_BGR2HSV)
 
     # cv2.imshow('sub image 1', converted_sub1)
     # cv2.imshow('sub image 2', converted_sub2)
 
     skinMask_sub1 = cv2.inRange(converted_sub1, lower, upper)
     skinMask_sub2 = cv2.inRange(converted_sub2, lower, upper)
+    skinMask_ori = cv2.inRange(converted_ori, lower, upper)
 
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))
     skinMask_sub1 = cv2.erode(skinMask_sub1, kernel, iterations=2)
     skinMask_sub1 = cv2.dilate(skinMask_sub1, kernel, iterations=2)
     skinMask_sub2 = cv2.erode(skinMask_sub2, kernel, iterations=2)
     skinMask_sub2 = cv2.dilate(skinMask_sub2, kernel, iterations=2)
+    
+    skinMask_ori = cv2.erode(skinMask_ori, kernel, iterations=2)
+    skinMask_ori = cv2.dilate(skinMask_ori, kernel, iterations=2)
 
     # cv2.imshow('sub image 1', skinMask_sub1)
     # cv2.imshow('sub image 2', skinMask_sub2)
@@ -168,8 +179,21 @@ def skin_detector(img_copy, x, y, w, h, xbf, ybf):
     # pdb.set_trace();
     print 'Sum image 1', sum_image1
     print 'Sum image 2', sum_image2
+    
+    
+    
+#    for i in range (y,y+h):
+#        for j in range (x,x+w):
+#            if skinMask_ori[i,j]==0:
+#                left_min=i
+#                break
 
-    return sum_image1, sum_image2
+    [vx_perpen,vy_perpen] = Perpendicular([vx,vy])
+
+    cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
+    cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
+
+    return sum_image1, sum_image2, img_copy
 
 
 #    line1 = LineString((x,y), (x+w,y))
