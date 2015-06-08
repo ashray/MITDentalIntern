@@ -14,9 +14,9 @@ nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
 #nose_cascade = cv2.CascadeClassifier('nose18x15.xml')
 
 #img = cv2.imread('./photo/image11.JPG')
-img = cv2.imread('./photo/sampleFaceImage9.png')
+img = cv2.imread('./photo/sampleFaceImage.png')
 #img = cv2.imread('sampleFaceImage2.jpg')
-#img = cv2.imread('./photo/sampleFaceImage4.JPG')
+#img = cv2.imread('./photo/sampleFaceImage11.JPG')
 
 #----For Debugging-------
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -189,6 +189,12 @@ cv2.imshow('sub image 2',converted_sub2)
 
 skinMask_sub1 = cv2.inRange(converted_sub1, lower, upper)
 skinMask_sub2 = cv2.inRange(converted_sub2, lower, upper)
+
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))
+skinMask_sub1 = cv2.erode(skinMask_sub1, kernel, iterations = 2)
+skinMask_sub1 = cv2.dilate(skinMask_sub1, kernel, iterations = 2)
+skinMask_sub2 = cv2.erode(skinMask_sub2, kernel, iterations = 2)
+skinMask_sub2 = cv2.dilate(skinMask_sub2, kernel, iterations = 2)
 
 cv2.imshow('sub image 1',skinMask_sub1)
 cv2.imshow('sub image 2',skinMask_sub2)
