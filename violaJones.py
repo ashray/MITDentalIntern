@@ -30,7 +30,7 @@ def col_gray(img):
         return gray
 
 
-def viola_jones(gray):
+def viola_jones(gray,count,count_face,count_mouth,count_nose):
         face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
         eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
         mouth_cascade = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
@@ -208,7 +208,7 @@ img = cv2.imread('./photo/sampleFaceImage.png')
 img = resize_img(img)
 img_copy = img.copy()
 gray = col_gray(img)
-midPoint, x, y, w, h = viola_jones(gray)
+midPoint, x, y, w, h = viola_jones(gray,count,count_face,count_mouth,count_nose)
 
 print 'length of list', len(midPoint)
 print midPoint[0:len(midPoint)]
