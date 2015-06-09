@@ -14,13 +14,12 @@ gray = colGray(img)
 # midPoint = []
 # count_face, count_mouth, count_nose, count = 0, 0, 0, 0
 midPoint, x, y, w, h, intersection_x, intersection_y = faceFeatureDetector(img)#,count,count_face,count_mouth,count_nose)
-a = FindEdgeImage(img_copy[y:y + h, x:x+w])
-img_new = PlotPoints(a,img, x, y)
-# img_new = PlotPoints(a,img, 0, 0)
+a = FindEdgeImage(img_copy[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
+# img_new = PlotPoints(a,img, x, y)
+img_new = PlotPoints(a,img, 0, 0)
 
 cv2.imshow('img', img_new)
 cv2.waitKey(0)
-pdb.set_trace()
 len_list = len(midPoint) / 2
 
 midPointNP = np.asarray(midPoint)

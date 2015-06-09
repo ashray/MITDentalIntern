@@ -39,12 +39,35 @@ from canny import *
 #     storeBoundaryPoints = np.hstack((storeLeftBoundaryPoints, storeRightBoundaryPoints))
 #     return storeBoundaryPoints
 
+
+
 def findBoundary(inputImage):
-    pdb.set_trace()
-    contours, hierarchy = cv2.findContours(inputImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    a,b,c = contours[0].shape
+    # pdb.set_trace()
+    contours, hierarchy = cv2.findContours(inputImage,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
+    # pdb.set_trace()
+    a,b,c = contours[2].shape
     #Typically b turns out to be 1, which creates a problem for us
-    return contours[0].reshape(a,c)
+
+    len_contours = len(contours)
+    # print 'len contours',len_contours
+    # a=contours[3]
+
+    # Make this as infinite number ideally
+    min_value = 100000
+    j = 15
+    for i in range(0, len_contours-1):
+        a,b,c = contours[i].shape
+        contour_formatted = contours[i].reshape(a,c)
+        # print 'a shape',contour_formatted.shape
+        # print 'contour data',contour_formatted[:,1]
+        if min(contour_formatted[:,1])<min_value:
+            j = i
+            min_value = min(contour_formatted[:,1])
+    # for i in range (0,len_contours-1):
+
+    a,b,c = contours[j].shape
+    contour_formatted = contours[j].reshape(a,c)
+    return contour_formatted
     # pdb.set_trace()
 
 
