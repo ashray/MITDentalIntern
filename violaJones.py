@@ -113,7 +113,11 @@ def faceFeatureDetector(img):
 
 # Resize midPoint numpy array
 def draw_line(img, midPointDebug):
-    midPointDebug = np.transpose(midPointDebug)
+    row, col = midPointDebug.shape
+    if (row<col):
+        midPointDebug = np.transpose(midPointDebug)
+    else:
+        return
     [vx, vy, xbf, ybf] = cv2.fitLine(midPointDebug, cv2.cv.CV_DIST_L1, 0, 0.01, 0.01)
     # -----Verify this does not cause any major error-------
     # pdb.set_trace();
@@ -136,51 +140,51 @@ def draw_line(img, midPointDebug):
 
     return xbf, ybf, vx, vy
 
-def skin_detector(img_copy, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy):
+# def skin_detector(img_copy, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy):
 
-    sub_image1 = img_copy[y:y + h, x:xbf]
-    sub_image2 = img_copy[y:y + h, xbf:x + w]
-
-    # cv2.imshow('sub image 1', sub_image1)
-    # cv2.imshow('sub image 2', sub_image2)
-
-    # define the upper and lower boundaries of the HSV pixel
-    # intensities to be considered 'skin'
-    lower = np.array([0, 48, 80], dtype="uint8")
-    upper = np.array([20, 255, 255], dtype="uint8")
-
-    converted_sub1 = cv2.cvtColor(sub_image1, cv2.COLOR_BGR2HSV)
-    converted_sub2 = cv2.cvtColor(sub_image2, cv2.COLOR_BGR2HSV)
-    converted_ori = cv2.cvtColor(img_copy, cv2.COLOR_BGR2HSV)
-
-    # cv2.imshow('sub image 1', converted_sub1)
-    # cv2.imshow('sub image 2', converted_sub2)
-
-    skinMask_sub1 = cv2.inRange(converted_sub1, lower, upper)
-    skinMask_sub2 = cv2.inRange(converted_sub2, lower, upper)
-    skinMask_ori = cv2.inRange(converted_ori, lower, upper)
-
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))
-    skinMask_sub1 = cv2.erode(skinMask_sub1, kernel, iterations=2)
-    skinMask_sub1 = cv2.dilate(skinMask_sub1, kernel, iterations=2)
-    skinMask_sub2 = cv2.erode(skinMask_sub2, kernel, iterations=2)
-    skinMask_sub2 = cv2.dilate(skinMask_sub2, kernel, iterations=2)
-    
-    skinMask_ori = cv2.erode(skinMask_ori, kernel, iterations=2)
-    skinMask_ori = cv2.dilate(skinMask_ori, kernel, iterations=2)
-
-    # cv2.imshow('sub image 1', skinMask_sub1)
-    # cv2.imshow('sub image 2', skinMask_sub2)
-
-    #        cv2.equalizeHist(sub_image1,sub_image1)
-    #        cv2.equalizeHist(sub_image2,sub_image2)
-
-    sum_image1 = cv2.sumElems(skinMask_sub1)
-    sum_image2 = cv2.sumElems(skinMask_sub2)
-    # pdb.set_trace();
-    print 'Sum image 1', sum_image1
-    print 'Sum image 2', sum_image2
-    
+    # sub_image1 = img_copy[y:y + h, x:xbf]
+    # sub_image2 = img_copy[y:y + h, xbf:x + w]
+    #
+    # # cv2.imshow('sub image 1', sub_image1)
+    # # cv2.imshow('sub image 2', sub_image2)
+    #
+    # # define the upper and lower boundaries of the HSV pixel
+    # # intensities to be considered 'skin'
+    # lower = np.array([0, 48, 80], dtype="uint8")
+    # upper = np.array([20, 255, 255], dtype="uint8")
+    #
+    # converted_sub1 = cv2.cvtColor(sub_image1, cv2.COLOR_BGR2HSV)
+    # converted_sub2 = cv2.cvtColor(sub_image2, cv2.COLOR_BGR2HSV)
+    # converted_ori = cv2.cvtColor(img_copy, cv2.COLOR_BGR2HSV)
+    #
+    # # cv2.imshow('sub image 1', converted_sub1)
+    # # cv2.imshow('sub image 2', converted_sub2)
+    #
+    # skinMask_sub1 = cv2.inRange(converted_sub1, lower, upper)
+    # skinMask_sub2 = cv2.inRange(converted_sub2, lower, upper)
+    # skinMask_ori = cv2.inRange(converted_ori, lower, upper)
+    #
+    # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11))
+    # skinMask_sub1 = cv2.erode(skinMask_sub1, kernel, iterations=2)
+    # skinMask_sub1 = cv2.dilate(skinMask_sub1, kernel, iterations=2)
+    # skinMask_sub2 = cv2.erode(skinMask_sub2, kernel, iterations=2)
+    # skinMask_sub2 = cv2.dilate(skinMask_sub2, kernel, iterations=2)
+    #
+    # skinMask_ori = cv2.erode(skinMask_ori, kernel, iterations=2)
+    # skinMask_ori = cv2.dilate(skinMask_ori, kernel, iterations=2)
+    #
+    # # cv2.imshow('sub image 1', skinMask_sub1)
+    # # cv2.imshow('sub image 2', skinMask_sub2)
+    #
+    # #        cv2.equalizeHist(sub_image1,sub_image1)
+    # #        cv2.equalizeHist(sub_image2,sub_image2)
+    #
+    # sum_image1 = cv2.sumElems(skinMask_sub1)
+    # sum_image2 = cv2.sumElems(skinMask_sub2)
+    # # pdb.set_trace();
+    # print 'Sum image 1', sum_image1
+    # print 'Sum image 2', sum_image2
+    #
     
     
 #    for i in range (y,y+h):
@@ -189,9 +193,9 @@ def skin_detector(img_copy, x, y, w, h, xbf, ybf, intersection_x, intersection_y
 #                left_min=i
 #                break
 
-    [vx_perpen,vy_perpen] = Perpendicular([vx,vy])
-
-    cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
-    cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
-
-    return sum_image1, sum_image2, img_copy
+    # [vx_perpen,vy_perpen] = Perpendicular([vx,vy])
+    #
+    # cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
+    # cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
+    #
+    # return sum_image1, sum_image2, img_copy

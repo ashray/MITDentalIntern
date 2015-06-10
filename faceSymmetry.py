@@ -1,32 +1,38 @@
 import cv2
 import numpy as np
 import pdb
-# from findBoundary import findBoundary
 from image_downscale import image_downscale
 from violaJones import *
 from canny import *
 from symmetryMidpoints import symmetryMidpoints
+
+# Accept original image as input
 img = cv2.imread('sampleFaceImage.png')
 img = image_downscale(img, 400)
 img_copy = img.copy()
 gray = colGray(img)
 
 # midPoint = []
-# count_face, count_mouth, count_nose, count = 0, 0, 0, 0
-midPoint, x, y, w, h, intersection_x, intersection_y = faceFeatureDetector(img)#,count,count_face,count_mouth,count_nose)
 
+# Standard face detector; returns
+# x,y,w and h = face bounding rectangle , midPoint = an array of old symmetry line points, intersection_x, intersection_y = points for normal to the symmetry line
 
+midPoint, x, y, w, h, intersection_x, intersection_y = faceFeatureDetector(img)
 
+# Finds the edge boundary points and returns the outer boundary as a series of points in variable 'a'
 a = FindEdgeImage(img_copy[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
 
-# midpoints = symmetryMidpoints(a,img,x,y)
-midpoints = symmetryMidpoints(a,img,0,0)
+# Calculates distance between corresponding points on face curve to get an array of points for drawing central face symmetry line
+# midpoints = symmetryMidpoints(a,img,0,0)
+midpoints = symmetryMidpoints(a,img,x,y)
 
+# Draws central symmetry line using new symmetryMidpoints
 xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
 
 cv2.imshow('new midpoints',img)
 cv2.waitKey(0)
 
+# Plot the face curve
 # img_new = PlotPoints(a,img, x, y)
 img_new = PlotPoints(a,img, 0, 0)
 
@@ -39,9 +45,12 @@ midPointNP = np.asarray(midPoint)
 SymmetryLinePoints = midPointNP.reshape(len_list, 2)
 
 
-xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
-sum_image1, sum_image2, img_new = skin_detector(img_new, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy)
+# xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
+# sum_image1, sum_image2, img_new = skin_detector(img_new, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy)
 
+[vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
+cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
+cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
 #percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
 #print "Percentage asymmetry ", percentageDifference * 100
 
