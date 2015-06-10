@@ -42,16 +42,16 @@ img_new = PlotPoints(a,img_copy_cropped, 0, 0)
 
 cv2.imshow('img', img_new)
 cv2.waitKey(0)
-len_list = len(midPoint) / 2
-
-midPointNP = np.asarray(midPoint)
-
-SymmetryLinePoints = midPointNP.reshape(len_list, 2)
-
-xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
-# sum_image1, sum_image2, img_new = skin_detector(img_new, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy)
-
-[vx_perpen,vy_perpen] = Perpendicular([vx,vy])
+# len_list = len(midPoint) / 2
+#
+# midPointNP = np.asarray(midPoint)
+#
+# SymmetryLinePoints = midPointNP.reshape(len_list, 2)
+#
+# xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
+# # sum_image1, sum_image2, img_new = skin_detector(img_new, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy)
+#
+# [vx_perpen,vy_perpen] = Perpendicular([vx,vy])
 
 # The upper bounding line is defined by points intersection_x, intersection_y and direction vectors vx_perpen, vy_perpen
 
@@ -64,16 +64,15 @@ xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
 # a has the boundary points of the face
 
 [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
-cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
-cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
+# cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
+# cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
 linePoint1 = [(intersection_x+(100*vx_perpen)),(intersection_y+100*vy_perpen)]
 linePoint2 = [intersection_x-(100*vx_perpen),(intersection_y-100*vy_perpen)]
 
 [leftIntersectionPoint, rightIntersectionPoint] = FaceSymmetryLineIntersection(a, linePoint1, linePoint2)
-cv2.line(img, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
-cv2.line(img, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
-cv2.imshow('img_new', img)
-pdb.set_trace()
+cv2.line(img_copy_cropped, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
+cv2.line(img_copy_cropped, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
+cv2.imshow('img_new', img_copy_cropped)
 
 #percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
 #print "Percentage asymmetry ", percentageDifference * 100
