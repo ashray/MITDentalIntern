@@ -9,8 +9,8 @@ from numpy import linalg as LA
 
 def symmetryMidpoints(a, img, x, y):
     print "Shape of a ", a.shape
-    a[0,:] = a[0,:] + x
-    a[1,:] = a[1,:] + y
+    # a[0,:] = a[0,:] + x
+    # a[1,:] = a[1,:] + y
     num = len(a[0,:])
     print 'len of a ', num
     # correspondingPointsDistance = np.arange(num).reshape((2,num/2))

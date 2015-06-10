@@ -19,8 +19,8 @@ def FindEdgeImage(img):
 
 def PlotPoints(a,img, x, y):
     # a = a.transpose()
-    a[0,:] = a[0,:] + x
-    a[1,:] = a[1,:] + y
+    a[0,:] = a[0,:]
+    a[1,:] = a[1,:]
     num = len(a[0,:])
     for i in range(0,num):
         cv2.line(img, (a[0][i], a[1][i]), (a[0][i], a[1][i]), (255,0,0),6)

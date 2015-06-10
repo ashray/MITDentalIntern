@@ -34,7 +34,11 @@ cv2.waitKey(0)
 
 # Plot the face curve
 # img_new = PlotPoints(a,img, x, y)
-img_new = PlotPoints(a,img, 0, 0)
+margin_size = 8
+height, width, depth  = img_copy.shape
+img_copy_cropped = img_copy[margin_size:(height-margin_size), margin_size:(width-margin_size)]
+
+img_new = PlotPoints(a,img_copy_cropped, 0, 0)
 
 cv2.imshow('img', img_new)
 cv2.waitKey(0)
@@ -51,17 +55,26 @@ xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
 
 # The upper bounding line is defined by points intersection_x, intersection_y and direction vectors vx_perpen, vy_perpen
 
-cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
-cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
-sub_image1 = img_copy[y:y + h, x:xbf]
-sub_image2 = img_copy[y:y + h, xbf:x + w]
+# cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
+# cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
+# sub_image1 = img_copy[y:y + h, x:xbf]
+# sub_image2 = img_copy[y:y + h, xbf:x + w]
 # sub_image1 is the left side of the image
 # sub_image2 is the right side of the image
-
+# a has the boundary points of the face
 
 [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
 cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
 cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
+linePoint1 = [(intersection_x+(100*vx_perpen)),(intersection_y+100*vy_perpen)]
+linePoint2 = [intersection_x-(100*vx_perpen),(intersection_y-100*vy_perpen)]
+
+[leftIntersectionPoint, rightIntersectionPoint] = FaceSymmetryLineIntersection(a, linePoint1, linePoint2)
+cv2.line(img, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
+cv2.line(img, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
+cv2.imshow('img_new', img)
+pdb.set_trace()
+
 #percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
 #print "Percentage asymmetry ", percentageDifference * 100
 
