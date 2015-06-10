@@ -18,7 +18,7 @@ def FindEdgeImage(img):
     return a
 
 def PlotPoints(a,img, x, y):
-    a = a.transpose()
+    # a = a.transpose()
     a[0,:] = a[0,:] + x
     a[1,:] = a[1,:] + y
     num = len(a[0,:])

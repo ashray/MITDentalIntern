@@ -113,6 +113,7 @@ def faceFeatureDetector(img):
 
 # Resize midPoint numpy array
 def draw_line(img, midPointDebug):
+    midPointDebug = np.transpose(midPointDebug)
     [vx, vy, xbf, ybf] = cv2.fitLine(midPointDebug, cv2.cv.CV_DIST_L1, 0, 0.01, 0.01)
     # -----Verify this does not cause any major error-------
     # pdb.set_trace();

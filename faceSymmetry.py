@@ -5,7 +5,7 @@ import pdb
 from image_downscale import image_downscale
 from violaJones import *
 from canny import *
-
+from symmetryMidpoints import symmetryMidpoints
 img = cv2.imread('sampleFaceImage.png')
 img = image_downscale(img, 400)
 img_copy = img.copy()
@@ -14,7 +14,19 @@ gray = colGray(img)
 # midPoint = []
 # count_face, count_mouth, count_nose, count = 0, 0, 0, 0
 midPoint, x, y, w, h, intersection_x, intersection_y = faceFeatureDetector(img)#,count,count_face,count_mouth,count_nose)
+
+
+
 a = FindEdgeImage(img_copy[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
+
+# midpoints = symmetryMidpoints(a,img,x,y)
+midpoints = symmetryMidpoints(a,img,0,0)
+
+xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
+
+cv2.imshow('new midpoints',img)
+cv2.waitKey(0)
+
 # img_new = PlotPoints(a,img, x, y)
 img_new = PlotPoints(a,img, 0, 0)
 
