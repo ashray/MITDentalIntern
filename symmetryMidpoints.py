@@ -24,10 +24,11 @@ def symmetryMidpoints(a, img, x, y):
     # num = num - 1
     for i in range(0,(loopIterationCount-1)):
         # correspondingPointsDistance.append((1/2)*(math.sqrt((a[0,i]-a[0,num-1-i])*(a[0,i]-a[0,num-1-i]) + (a[1,i]-a[1,num-1-i])*(a[1,i]-a[1,num-1-i]))))   #complete this
-        correspondingPointsDistance.append((1/2)*(a[0,i]-a[0,num-1-i]))
+        correspondingPointsDistance.append(a[0,loopIterationCount+i] - a[0,i])
     # num = num + 1
-    lenDistanceArray = len(correspondingPointsDistance)
-    print 'Length of the correspondingPointsDistance array is ', lenDistanceArray
+    # lenDistanceArray = len(correspondingPointsDistance)
+    # pdb.set_trace()
+    # print 'Length of the correspondingPointsDistance array is ', lenDistanceArray
     # correspondingPointsDistanceArray = np.arange(lenDistanceArray)
     correspondingPointsDistanceArray = np.asarray(correspondingPointsDistance)
 

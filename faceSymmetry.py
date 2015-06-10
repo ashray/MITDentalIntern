@@ -27,10 +27,19 @@ a = FindEdgeImage(img_copy[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
 midpoints = symmetryMidpoints(a,img,x,y)
 
 # Draws central symmetry line using new symmetryMidpoints
-xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
+# xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
+
+img = PlotPoints(midpoints,img_copy, 0, 0)
+# ------------------------------------------------------------
+# Use fitline to fit these points on a straight line. Verify using photoshop if that is the actual centre. Also check if there is a shift of 8 points or not.
+#
+# Then get the slope and input it to the perpendicular function used below
+# ------------------------------------------------------------
 
 cv2.imshow('new midpoints',img)
 cv2.waitKey(0)
+print a.shape
+pdb.set_trace()
 
 # Plot the face curve
 # img_new = PlotPoints(a,img, x, y)
