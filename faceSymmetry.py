@@ -44,9 +44,20 @@ midPointNP = np.asarray(midPoint)
 
 SymmetryLinePoints = midPointNP.reshape(len_list, 2)
 
-
-# xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
+xbf, ybf, vx, vy= draw_line(img_new, SymmetryLinePoints)
 # sum_image1, sum_image2, img_new = skin_detector(img_new, x, y, w, h, xbf, ybf, intersection_x, intersection_y, vx, vy)
+
+[vx_perpen,vy_perpen] = Perpendicular([vx,vy])
+
+# The upper bounding line is defined by points intersection_x, intersection_y and direction vectors vx_perpen, vy_perpen
+
+cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
+cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
+sub_image1 = img_copy[y:y + h, x:xbf]
+sub_image2 = img_copy[y:y + h, xbf:x + w]
+# sub_image1 is the left side of the image
+# sub_image2 is the right side of the image
+
 
 [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
 cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
