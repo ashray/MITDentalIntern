@@ -29,6 +29,9 @@ midpoints = symmetryMidpoints(a,img,x,y)
 # Draws central symmetry line using new symmetryMidpoints
 # xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
 
+xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
+cv2.imshow('new midpoints fitline',img)
+
 img = PlotPoints(midpoints,img_copy, 0, 0)
 # ------------------------------------------------------------
 # Use fitline to fit these points on a straight line. Verify using photoshop if that is the actual centre. Also check if there is a shift of 8 points or not.
