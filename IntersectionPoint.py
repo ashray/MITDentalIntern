@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import pdb
 
 def Perpendicular(a) :
     b = np.empty_like(a)
@@ -50,6 +51,21 @@ def DistancePointLine (px, py, x1, y1, x2, y2):
         iy = y1 + u * (y2 - y1)
         DistancePointLine = lineMagnitude(px, py, ix, iy)
     return DistancePointLine
+
+# def assignWeights(curve_midpoints,feature_midpoints):
+#     curve_midpoints_list_left = np.array(curve_midpoints[0,:]).tolist()
+#     curve_midpoints_list_right = np.array(curve_midpoints[1,:]).tolist()
+#     feature_midpoints_list = np.array(feature_midpoints).tolist()
+#     for j in range(0,(len(feature_midpoints_list)-1),2):
+#         for i in range (0,50):
+#             curve_midpoints_list_left.append(feature_midpoints_list[j])
+#             curve_midpoints_list_right.append(feature_midpoints_list[j+1])
+#     curve_midpoints_list = curve_midpoints_list_left + curve_midpoints_list_right
+#     curve_midpoints2 = np.asarray(curve_midpoints_list)
+#
+#     pdb.set_trace()
+#
+#     return curve_midpoints2
 
 # We give an array of points as input and we want to return the point which is the closest to that line
 def CurveLineIntersection(curve_points, linePoint1, linePoint2):

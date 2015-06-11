@@ -6,7 +6,7 @@ from canny import *
 from numpy import linalg as LA
 
 # Calculates distance between corresponding points on face curve to get an array of points for drawing central face symmetry line
-
+# a - array of boundary points
 def symmetryMidpoints(a, img, x, y):
     print "Shape of a ", a.shape
     # a[0,:] = a[0,:] + x

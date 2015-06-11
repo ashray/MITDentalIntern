@@ -25,12 +25,17 @@ a = FindEdgeImage(img_copy[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
 # Calculates distance between corresponding points on face curve to get an array of points for drawing central face symmetry line
 # midpoints = symmetryMidpoints(a,img,0,0)
 midpoints = symmetryMidpoints(a,img,x,y)
-
+margin_size = 8
 # Draws central symmetry line using new symmetryMidpoints
 # xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
+# midpoints_features = assignWeights(midpoints,midPoint)
+height, width, depth  = img.shape
+img_cropped = img[margin_size:(height-margin_size), margin_size:(width-margin_size)]
+xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img_cropped,midpoints)
 
-xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
-cv2.imshow('new midpoints fitline',img)
+cv2.imshow('new midpoints fitline',img_cropped)
+
+pdb.set_trace()
 
 img = PlotPoints(midpoints,img_copy, 0, 0)
 # ------------------------------------------------------------
@@ -46,7 +51,7 @@ print a.shape
 
 # Plot the face curve
 # img_new = PlotPoints(a,img, x, y)
-margin_size = 8
+
 height, width, depth  = img_copy.shape
 img_copy_cropped = img_copy[margin_size:(height-margin_size), margin_size:(width-margin_size)]
 
