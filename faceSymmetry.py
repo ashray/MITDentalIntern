@@ -42,7 +42,7 @@ img = PlotPoints(midpoints,img_copy, 0, 0)
 cv2.imshow('new midpoints',img)
 cv2.waitKey(0)
 print a.shape
-pdb.set_trace()
+# pdb.set_trace()
 
 # Plot the face curve
 # img_new = PlotPoints(a,img, x, y)
@@ -84,11 +84,11 @@ linePoint2 = [intersection_x-(100*vx_perpen),(intersection_y-100*vy_perpen)]
 [leftIntersectionPoint, rightIntersectionPoint] = FaceSymmetryLineIntersection(a, linePoint1, linePoint2)
 cv2.line(img_copy_cropped, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
 cv2.line(img_copy_cropped, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
-cv2.imshow('img_new', img_copy_cropped)
+cv2.imshow('img_new_cropped', img_copy_cropped)
 
 #percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
 #print "Percentage asymmetry ", percentageDifference * 100
 
-cv2.imshow('img', img_new)
+# cv2.imshow('img', img_new)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
