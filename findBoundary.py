@@ -10,6 +10,8 @@ from violaJones import *
 from canny import *
 
 # Finds the outermost boundary in the edge image, originally written to find outer face boundary after canny operator
+
+# $$$ This is the original findBoundary which works beautifully ! Writing a similar one with minor change to restrict the curve to only within the face bounding box
 def findBoundary(inputImage):
     height, width =inputImage.shape
     margin = 3
@@ -39,6 +41,34 @@ def findBoundary(inputImage):
     storeBoundaryPoints = np.hstack((storeLeftBoundaryPoints, storeRightBoundaryPoints))
     return storeBoundaryPoints
 
+# def findBoundary(inputImage):
+#     height, width =inputImage.shape
+#     margin = 3
+#     temp = 0
+#     croppedImage = inputImage[margin:(height - margin), margin:(width - margin)]
+#     newHeight, newWidth = croppedImage.shape
+#     storeLeftBoundaryPoints = np.arange(2 * int(newHeight)).reshape((2, int(newHeight)))
+#     for i in range(0, newHeight):
+#         foundPoint = 0
+#         for j in range(0, newWidth):
+#             if croppedImage[i, j] != 0:
+#                 storeLeftBoundaryPoints[:, i] = [j, i]
+#                 foundPoint = 1
+#                 break
+#             elif foundPoint == 0:
+#                 storeLeftBoundaryPoints[:,i] = [0,0]
+#     storeRightBoundaryPoints = np.arange(2 * int(newHeight)).reshape((2, int(newHeight)))
+#     for i in range(0, newHeight):
+#         foundPoint = 0
+#         for j in range(newWidth-1,0, -1):
+#             if croppedImage[i, j] != 0:
+#                 storeRightBoundaryPoints[:, i] = [j, i]
+#                 foundPoint = 1
+#                 break
+#             elif foundPoint == 0:
+#                 storeRightBoundaryPoints[:,i] = [0,0]
+#     # storeBoundaryPoints = np.hstack((storeLeftBoundaryPoints, storeRightBoundaryPoints))
+#     return storeLeftBoundaryPoints, storeRightBoundaryPoints
 
 
 # def findBoundary(inputImage):
@@ -68,7 +98,7 @@ def findBoundary(inputImage):
 #     a,b,c = contours[j].shape
 #     contour_formatted = contours[j].reshape(a,c)
 #     return contour_formatted
-    # pdb.set_trace()
+#     # pdb.set_trace()
 
 
 # img = cv2.imread('sampleFaceImage.png')
