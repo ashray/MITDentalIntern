@@ -41,17 +41,13 @@ def symmetryCalculationIntensity(face_boundary_points,input_img, eye_line_point1
             elif ((symmetry_perpendicular_intersection[1]<face_boundary_points[1,i]) and (face_boundary_points[1,i]<eye_line_point2[1])):
                 xf = find_x(face_boundary_points[1], eye_line_point1, eye_line_point2)
                 xg = find_x(face_boundary_points[1], symmetry_point1, symmetry_point2)
-                sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xf, face_boundary_points[1,i]])
-                sum_right = sum_right + np.sum(input_img[xf:xg, face_boundary_points[1,i]])
+                sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
+                sum_right = sum_right + np.sum(input_img[xg:xf, face_boundary_points[1,i]])
             elif face_boundary_points[1]>eye_line_point2[1]:
                 xg = find_x(face_boundary_points[1], symmetry_point1, symmetry_point2)
-                sum_left = sum_left + np.sum()
+                sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
+                sum_right = sum_right + np.sum(input_img[xg:face_boundary_points[1,i], face_boundary_points[1,i]])
 
+        # For the case where eye_line_point1[1]>=eye_line_point2[1]:
+        else
 
-                b = np.where(np.array(left_boundary[1,:])==eye_line_point1[1])
-                c = face_boundary_points[0,b]
-                d = np.where(np.array(right_boundary[1,:])==right_boundary[1])
-                e = face_boundary_points[0,d]
-                #
-                for j in range(face_boundary_points[1, b], )
-                sum =
