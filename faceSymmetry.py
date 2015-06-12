@@ -20,11 +20,28 @@ gray = colGray(img)
 midPoint, x, y, w, h, intersection_x, intersection_y = faceFeatureDetector(img)
 
 # Finds the edge boundary points and returns the outer boundary as a series of points in variable 'a'
+
+# $$$
 a = FindEdgeImage(img_copy[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
+# aBound = np.arange(2 * len(a)).reshape((2, len(a)))
+#
+# for i in range (0, len(a)/2):
+#     if(a[1,i]<y+h):
+#         aBound[1,i]=a[1,i]
+#     else:
+#         break
+
+
+
+# a = FindEdgeImage(img_copy[max((y-h),0):y + 2*h, max((x-w),0):x+2*w], y, h)
 
 # Calculates distance between corresponding points on face curve to get an array of points for drawing central face symmetry line
 # midpoints = symmetryMidpoints(a,img,0,0)
+
+# $$$
 midpoints = symmetryMidpoints(a,img,x,y)
+
+# midpoints = symmetryMidpoints(aBound,img,x,y)
 margin_size = 8
 # Draws central symmetry line using new symmetryMidpoints
 # xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img,midpoints)
@@ -35,7 +52,7 @@ xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img_cropped,midpoints)
 
 cv2.imshow('new midpoints fitline',img_cropped)
 
-pdb.set_trace()
+# pdb.set_trace()
 
 img = PlotPoints(midpoints,img_copy, 0, 0)
 # ------------------------------------------------------------
