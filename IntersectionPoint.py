@@ -11,7 +11,7 @@ def Perpendicular(a) :
 # line segment a given by endpoints a1, a2
 # line segment b given by endpoints b1, b2
 # return
-def LineSegmentIntersection(a1,a2, b1,b2) :
+def LineSegmentIntersection(a1,a2, b1,b2):
     da = a2-a1
     db = b2-b1
     dp = a1-b1
