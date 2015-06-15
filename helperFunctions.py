@@ -12,9 +12,12 @@ def find_x(y, point1, point2):
     if abs(x2-x1) < 2:
         return x1
     elif abs(y2-y1) == 0:
-        return "Error"
+        return "Can not find intersection"
     else:
         m = (y2-y1)/(x2-x1)
         x = (y-(y1-((y2-y1)/(x2-x1))*x1))/m
         return x
     # y = mx + c
+
+def dot_product(arr1, arr2):
+    return arr1[0]*arr2[0] + arr1[1]*arr2[1]

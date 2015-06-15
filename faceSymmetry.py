@@ -5,11 +5,13 @@ from image_downscale import image_downscale
 from violaJones import *
 from canny import *
 from symmetryMidpoints import symmetryMidpoints
+from symmetryCalculation import symmetryCalculationIntensity
 
 # Accept original image as input
-img = cv2.imread('sampleFaceImage.png')
+img = cv2.imread('./photo/sampleFaceImage10.png')
 img = image_downscale(img, 400)
 img_copy = img.copy()
+img_copy_2 = img.copy()
 gray = colGray(img)
 
 # midPoint = []
@@ -96,18 +98,26 @@ cv2.waitKey(0)
 # sub_image1 is the left side of the image
 # sub_image2 is the right side of the image
 # a has the boundary points of the face
-
+print 'Working till before perpen calc'
 [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
 # cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x+(100*vx_perpen),intersection_y+100*vy_perpen), (255, 224, 0), 6)
 # cv2.line(img_copy,(intersection_x,intersection_y),(intersection_x-(100*vx_perpen),intersection_y-100*vy_perpen), (255, 224, 0), 6)
+
+# intersection_x , intersection_y is the mid point of the two eyes. Perpendicular line passes through these points
 linePoint1 = [(intersection_x+(100*vx_perpen)),(intersection_y+100*vy_perpen)]
 linePoint2 = [intersection_x-(100*vx_perpen),(intersection_y-100*vy_perpen)]
 
 [leftIntersectionPoint, rightIntersectionPoint] = FaceSymmetryLineIntersection(a, linePoint1, linePoint2)
+# leftIntersectionPoint = np.array(leftIntersectionPoint)
+# rightIntersectionPoint = np.array(rightIntersectionPoint)
 cv2.line(img_copy_cropped, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
 cv2.line(img_copy_cropped, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
 cv2.imshow('img_new_cropped', img_copy_cropped)
 
+print 'Calling percent calc'
+
+left_percentage, right_percentage = symmetryCalculationIntensity(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
+print 'Left % = ',left_percentage,' Right % = ',right_percentage
 #percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
 #print "Percentage asymmetry ", percentageDifference * 100
 

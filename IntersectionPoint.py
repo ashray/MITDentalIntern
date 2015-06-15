@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import pdb
+from helperFunctions import dot_product
 
 def Perpendicular(a) :
     b = np.empty_like(a)
@@ -12,12 +13,16 @@ def Perpendicular(a) :
 # line segment b given by endpoints b1, b2
 # return
 def LineSegmentIntersection(a1,a2, b1,b2):
-    da = a2-a1
-    db = b2-b1
-    dp = a1-b1
+    # da = int(math.ceil(math.sqrt((a2[0]-a1[0])*(a2[0]-a1[0]) + (a2[1]-a1[1])*(a2[1]-a1[1]))))
+    # db = int(math.ceil(math.sqrt((b2[0]-b1[0])*(b2[0]-b1[0]) + (b2[1]-b1[1])*(b2[1]-b1[1]))))
+    # dp = int(math.ceil(math.sqrt((a1[0]-b1[0])*(a1[0]-b1[0]) + (a1[1]-b1[1])*(a1[1]-b1[1]))))
+    da = a2 - a1
+    db = b2 - b1
+    dp = a1 - b1
     dap = Perpendicular(da)
-    denom = np.dot( dap, db)
-    num = np.dot( dap, dp )
+    # pdb.set_trace()
+    denom = dot_product( dap, db)
+    num = dot_product( dap, dp )
     return (num / denom.astype(float))*db + b1
 
 def lineMagnitude (x1, y1, x2, y2):
