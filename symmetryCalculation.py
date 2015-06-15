@@ -90,6 +90,8 @@ def symmetryCalculationIntensity(face_boundary_points,input_img, eye_line_point1
 
             elif face_boundary_points[1,i]>eye_line_point2[1]:
                 xg = find_x(face_boundary_points[1,i], symmetry_point1, symmetry_point2)
+                # if(i>100):
+                    # pdb.set_trace()
                 sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
                 sum_right = sum_right + np.sum(input_img[xg:right_boundary[0,i], face_boundary_points[1,i]])
                 # sum_right = sum_right + np.sum(input_img[xg:face_boundary_points[1,i], face_boundary_points[1,i]])
