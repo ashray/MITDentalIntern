@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import math
 import pdb
@@ -15,6 +16,8 @@ def find_x(y, point1, point2):
         return "Can not find intersection"
     else:
         m = (y2-y1)/(x2-x1)
+        if m==0:
+            pdb.set_trace()
         x = (y-(y1-((y2-y1)/(x2-x1))*x1))/m
         return x
     # y = mx + c

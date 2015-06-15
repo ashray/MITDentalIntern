@@ -78,18 +78,18 @@ def symmetryCalculationIntensity(face_boundary_points,input_img, eye_line_point1
                 print 'pass ',i
                 pass
             elif (face_boundary_points[1,i] < symmetry_perpendicular_intersection[1]) and (eye_line_point1[1] < face_boundary_points[1,i]):
-                xf = find_x(face_boundary_points[1],eye_line_point1, eye_line_point2)
+                xf = find_x(face_boundary_points[1,i],eye_line_point1, eye_line_point2)
                 sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xf, face_boundary_points[1,i]])
                 print 'cond 1'
             elif ((symmetry_perpendicular_intersection[1]<face_boundary_points[1,i]) and (face_boundary_points[1,i]<eye_line_point2[1])):
-                xf = find_x(face_boundary_points[1], eye_line_point1, eye_line_point2)
-                xg = find_x(face_boundary_points[1], symmetry_point1, symmetry_point2)
+                xf = find_x(face_boundary_points[1,i], eye_line_point1, eye_line_point2)
+                xg = find_x(face_boundary_points[1,i], symmetry_point1, symmetry_point2)
                 sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
                 sum_right = sum_right + np.sum(input_img[xg:xf, face_boundary_points[1,i]])
                 print 'cond 2'
 
             elif face_boundary_points[1,i]>eye_line_point2[1]:
-                xg = find_x(face_boundary_points[1], symmetry_point1, symmetry_point2)
+                xg = find_x(face_boundary_points[1,i], symmetry_point1, symmetry_point2)
                 sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
                 sum_right = sum_right + np.sum(input_img[xg:right_boundary[0,i], face_boundary_points[1,i]])
                 # sum_right = sum_right + np.sum(input_img[xg:face_boundary_points[1,i], face_boundary_points[1,i]])
@@ -108,20 +108,22 @@ def symmetryCalculationIntensity(face_boundary_points,input_img, eye_line_point1
             if face_boundary_points[1, i] < eye_line_point2[1]:
                 pass
             elif (face_boundary_points[1,i] < symmetry_perpendicular_intersection[1]) and (eye_line_point2[1] < face_boundary_points[1,i]) :
-                xf = find_x(face_boundary_points[1], eye_line_point1, eye_line_point2)
+                xf = find_x(face_boundary_points[1,i], eye_line_point1, eye_line_point2)
                 sum_right = sum_right + np.sum(input_img[xf:right_boundary[0,i], face_boundary_points[1,i]])
                 #
                 # xg = find_x(face_boundary_points[1], symmetry_point1, symmetry_point2)
                 # sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
                 # sum_right = sum_right + np.sum(input_img[xg:xf, face_boundary_points[1,i]])
             elif ((symmetry_perpendicular_intersection[1]<face_boundary_points[1,i]) and (face_boundary_points[1,i]<eye_line_point1[1])):
-                xf = find_x(face_boundary_points[1],eye_line_point1, eye_line_point2)
-                xg = find_x(face_boundary_points[1], symmetry_point1, symmetry_point2)
+                xf = find_x(face_boundary_points[1,i],eye_line_point1, eye_line_point2)
+                xg = find_x(face_boundary_points[1,i], symmetry_point1, symmetry_point2)
                 sum_left = sum_left + np.sum(input_img[xf:xg, face_boundary_points[1,i]])
                 sum_right = sum_right + np.sum(input_img[xg:right_boundary[0,i], face_boundary_points[1,i]])
             elif face_boundary_points[1,i]>eye_line_point1[1]:
-                xg = find_x(face_boundary_points[1], symmetry_point1, symmetry_point2)
+                xg = find_x(face_boundary_points[1,i], symmetry_point1, symmetry_point2)
                 # pdb.set_trace()
+                print "face_boundary_points[0,i] = ", face_boundary_points[0,i]
+                print "xg = ", xg
                 sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
                 sum_right = sum_right + np.sum(input_img[xg:right_boundary[0,i], face_boundary_points[1,i]])
 
