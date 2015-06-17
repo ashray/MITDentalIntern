@@ -6,11 +6,11 @@ import pdb
 import math
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml') 
+eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 mouth_cascade = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
 nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
 
-#eye_cascade = cv2.CascadeClassifier('eyes22x5.xml') 
+#eye_cascade = cv2.CascadeClassifier('eyes22x5.xml')
 #mouth_cascade = cv2.CascadeClassifier('mouth.xml')
 #nose_cascade = cv2.CascadeClassifier('nose18x15.xml')
 
@@ -107,7 +107,7 @@ while True:
                 cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
                 midPoint.append(x+w/2)
                 midPoint.append(y+h/2)
-                
+
                 print midPoint[0:len(midPoint)]
 
                 #midPoint[0] = x+w/2;
@@ -152,7 +152,7 @@ while True:
                 mouth = mouth_cascade.detectMultiScale(roi_gray,4,2)
                 for (mx,my,mw,mh) in mouth:
                     count_mouth=count_mouth+1
-                    
+
                     #midPoint[6] = mx + mw/2
                     #midPoint[7] = my + mh/2
                     #midPoint[6] = midPoint[6]+x;
@@ -165,7 +165,7 @@ while True:
                     curr_len = len(midPoint)
                     cv2.line(img,(midPoint[curr_len-2],midPoint[curr_len-1]),(midPoint[curr_len-2],midPoint[curr_len-1]),(0,0,255),6)
                     print midPoint[0:len(midPoint)]
-                
+
                 else:
                     print 'Mouth != 1'
                     #midPoint[6],midPoint[7]=midPoint[0],midPoint[1]
@@ -175,7 +175,7 @@ while True:
                 nose = nose_cascade.detectMultiScale(roi_gray)
                 for (nx,ny,nw,nh) in nose:
                     count_nose = count_nose+1
-                    
+
                     #midPoint[4] = nx+nw/2;
                     #midPoint[5] = ny+nh/2;
                     #midPoint[4] = midPoint[4]+x;
@@ -191,7 +191,7 @@ while True:
 
                 else:
                     print 'Nose != 1'
-                    #midPoint[4],midPoint[5]=midPoint[0],midPoint[1] 
+                    #midPoint[4],midPoint[5]=midPoint[0],midPoint[1]
 
             else:
                 print 'Face != 1'

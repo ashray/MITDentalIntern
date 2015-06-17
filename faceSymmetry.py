@@ -6,16 +6,21 @@ from violaJones import *
 from canny import *
 from symmetryMidpoints import symmetryMidpoints
 from symmetryCalculation import symmetryCalculationIntensity
+# from faceDetectionVideo import faceDetectionVideo
 
 # Accept original image as input
-# img = cv2.imread('sampleFaceImage.png')
+img = cv2.imread('sampleFaceImage.png')
 # img = cv2.imread('./photo/images3.jpg')
 # img = cv2.imread('./photo/images-1.jpg')
-img = cv2.imread('./photo/sampleFaceImage18.jpg')
+# img = cv2.imread('./photo/sampleFaceImage10.png')
 img = image_downscale(img, 400)
 img_copy = img.copy()
 img_copy_2 = img.copy()
 gray = colGray(img)
+
+# flipping an image about y axis
+flipped = cv2.flip(img_copy_2,1)
+cv2.imshow('flipped',flipped)
 
 # midPoint = []
 
@@ -24,6 +29,9 @@ gray = colGray(img)
 
 midPoint, x, y, w, h, intersection_x, intersection_y = faceFeatureDetector(img)
 
+# x1,y1,x2,y2,img = faceDetectionVideo()
+# img = image_downscale(img, 400)
+# a = FindEdgeImage(img[max((y1-y2),0):y1 + 2*y2, max((x1-x2),0):x1+2*x2])
 # Finds the edge boundary points and returns the outer boundary as a series of points in variable 'a'
 
 # $$$
@@ -59,7 +67,10 @@ cv2.imshow('new midpoints fitline',img_cropped)
 
 # pdb.set_trace()
 
-img = PlotPoints(midpoints,img_copy, 0, 0)
+height, width, depth  = img_copy.shape
+img_copy_cropped = img_copy[margin_size:(height-margin_size), margin_size:(width-margin_size)]
+
+img = PlotPoints(midpoints,img_copy_cropped, 0, 0)
 # ------------------------------------------------------------
 # Use fitline to fit these points on a straight line. Verify using photoshop if that is the actual centre. Also check if there is a shift of 8 points or not.
 #
@@ -74,12 +85,11 @@ print a.shape
 # Plot the face curve
 # img_new = PlotPoints(a,img, x, y)
 
-height, width, depth  = img_copy.shape
-img_copy_cropped = img_copy[margin_size:(height-margin_size), margin_size:(width-margin_size)]
+
 
 img_new = PlotPoints(a,img_copy_cropped, 0, 0)
 
-cv2.imshow('img', img_new)
+cv2.imshow('img', img)
 cv2.waitKey(0)
 # len_list = len(midPoint) / 2
 #

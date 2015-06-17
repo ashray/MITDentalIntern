@@ -136,3 +136,60 @@ def symmetryCalculationIntensity(face_boundary_points,input_img, eye_line_point1
 
     return left_percentage, right_percentage
 
+#
+# def symmetryCalculationFlip (face_boundary_points,input_img, eye_line_point1,eye_line_point2, x_symmetry, y_symmetry, vx_symmetry, vy_symmetry):
+#
+#     symmetry_point1 = [(x_symmetry - 200*vx_symmetry),(y_symmetry - 200*vy_symmetry)]
+#     symmetry_point2 = [(x_symmetry + 200*vx_symmetry),(y_symmetry + 200*vy_symmetry)]
+#
+#     row, col, depth = input_img.shape
+#     if col<row:
+#         input_img = np.transpose(input_img)
+#     else:
+#         pass
+#
+#     # We know that eye_line_point1 is going to be on the left side of the face
+#     points_count = len(face_boundary_points[0,:])
+#     left_boundary = face_boundary_points[:,0:((points_count/2)-1)]
+#     right_boundary = face_boundary_points[:, (points_count/2):(points_count-1)]
+#
+#     # We need to scan all the points on the left boundary which have y value greater than eye_line_point1
+#     sum = 0
+#     symmetry_point1 = np.asarray(symmetry_point1)
+#     symmetry_point2 = np.asarray(symmetry_point2)
+#     symmetry_point1 = symmetry_point1.astype(int)
+#     symmetry_point2 = symmetry_point2.astype(int)
+#
+#     # symmetry_perpendicular_intersection = LineSegmentIntersection([int(symmetry_point1[0]), int(symmetry_point1[1])], [int(symmetry_point2[0]), int(symmetry_point2[1])], eye_line_point1, eye_line_point2)
+#     eye_line_point1 = np.asarray(eye_line_point1)
+#     eye_line_point2 = np.asarray(eye_line_point2)
+#     eye_line_point1 = eye_line_point1.reshape((2,1))
+#     eye_line_point2 = eye_line_point2.reshape((2,1))
+#     eye_line_point1 = eye_line_point1.astype(int)
+#     eye_line_point2 = eye_line_point2.astype(int)
+#     # pdb.set_trace()
+#     symmetry_perpendicular_intersection = LineSegmentIntersection(symmetry_point1, symmetry_point2, eye_line_point1, eye_line_point2)
+#
+#     symmetry_perpendicular_intersection = np.asarray(symmetry_perpendicular_intersection)
+#     symmetry_perpendicular_intersection = symmetry_perpendicular_intersection.astype(int)
+#
+#     sum_left = 0
+#     sum_right = 0
+#     for i in range(0, (points_count/2) - 1):
+#         # The above loop will run if eye_line_point1[1]< eye_line_point2[1]
+#         if (eye_line_point1[1]<eye_line_point2[1]) or (eye_line_point1[1] == eye_line_point2[1]):
+#             if face_boundary_points[1, i] < eye_line_point1[1]:
+#                 print 'pass ',i
+#                 pass
+#             elif (face_boundary_points[1,i] < symmetry_perpendicular_intersection[1]) and (eye_line_point1[1] < face_boundary_points[1,i]):
+#                 xf = find_x(face_boundary_points[1,i],eye_line_point1, eye_line_point2)
+#                 sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xf, face_boundary_points[1,i]])
+#                 print 'cond 1'
+#             elif ((symmetry_perpendicular_intersection[1]<face_boundary_points[1,i]) and (face_boundary_points[1,i]<eye_line_point2[1])):
+#                 xf = find_x(face_boundary_points[1,i], eye_line_point1, eye_line_point2)
+#                 xg = find_x(face_boundary_points[1,i], symmetry_point1, symmetry_point2)
+#                 sum_left = sum_left + np.sum(input_img[face_boundary_points[0,i]:xg, face_boundary_points[1,i]])
+#                 sum_right = sum_right + np.sum(input_img[xg:xf, face_boundary_points[1,i]])
+#                 print 'cond 2'
+#
+#             elif "the left right parsing":
