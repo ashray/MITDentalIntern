@@ -8,9 +8,10 @@ from symmetryMidpoints import symmetryMidpoints
 from symmetryCalculation import symmetryCalculationIntensity
 
 # Accept original image as input
-# img = cv2.imread('./photo/sampleFaceImage10.png')
 # img = cv2.imread('sampleFaceImage.png')
-img = cv2.imread('sampleFaceImage3.JPG')
+# img = cv2.imread('./photo/images3.jpg')
+# img = cv2.imread('./photo/images-1.jpg')
+img = cv2.imread('./photo/sampleFaceImage18.jpg')
 img = image_downscale(img, 400)
 img_copy = img.copy()
 img_copy_2 = img.copy()

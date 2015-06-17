@@ -126,7 +126,7 @@ def draw_line(img, midPointDebug):
     ybf = np.around(ybf)
     # -------------------------------------------------------
     # Hack just to get 2 points from the direction vectors so that we can plot the line
-    distance = 200
+    distance = 400
     x2 = xbf + distance * vx
     y2 = ybf + distance * vy
 
