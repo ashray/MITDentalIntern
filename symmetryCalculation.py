@@ -153,6 +153,7 @@ def symmetryCalculationBoundaryDifference(face_boundary_points, input_img, eye_l
     # else:
     #     pass
 
+
     points_count = len(face_boundary_points[0, :])
     left_boundary = face_boundary_points[:, 0:((points_count / 2) - 1)]
     right_boundary = face_boundary_points[:, (points_count / 2):(points_count - 1)]
