@@ -27,8 +27,8 @@ def detect(img, cascade):
     return rects
 
 def draw_rects(img, rects, color):
-    for x1, y1, x2, y2 in rects:
-        cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+    for x, y, w, h in rects:
+        cv2.rectangle(img, (x, y), (w, h), color, 2)
 
 # def faceDetectionVideo():
 if __name__ == '__main__':
@@ -63,10 +63,13 @@ if __name__ == '__main__':
 
     # pdb.set_trace()
     print 'starting while'
-    pdb.set_trace()
+    # pdb.set_trace()
 
     while True:
+        # print 'initializing x,y'
+        # x,y,w,h=rects[0][0],rects[0][1],rects[0][2],rects[0][3]
         vis = img.copy()
+        img2 = img.copy()
         img_copy = img.copy()
         draw_rects(vis, rects, (0, 255, 0))
         try:
@@ -80,47 +83,71 @@ if __name__ == '__main__':
             rects[0][2]=0
             rects[0][3]=0
             print 'Face not detected'
-        # x1,y1,x2,y2=rects[0][0]-10,rects[0][1]-10,rects[0][2]+10,rects[0][3]+10
-        # print 'initializing x,y'
-        for x1, y1, x2, y2 in rects:
-            roi = gray[y1:y2, x1:x2]
-            vis_roi = vis[y1:y2, x1:x2]
+            break
+
+        # i=0
+        for x, y, w, h in rects:
+            intersection_x = x + w/2
+            intersection_y = y + h/2
+            roi = gray[y:h, x:w]
+            vis_roi = vis[y:h, x:w]
             subrects = detect(roi.copy(), eye_cascade)
             draw_rects(vis_roi, subrects, (255, 0, 0))
             subrects = detect(roi.copy(), nose_cascade)
             draw_rects(vis_roi, subrects, (0, 255, 0))
             subrects = detect(roi.copy(), mouth_cascade)
             draw_rects(vis_roi, subrects, (0, 0, 255))
-            # gray_roi = gray[y1-10:y2+10,x1-10:x2+10]
+            # gray_roi = gray[y-10:h+10,x-10:w+10]
         # pdb.set_trace()
         # dt = clock() - t
             cam = create_capture(video_src, fallback='synth:bg=../data/lena.jpg:noise=0.05')
             ret, img = cam.read()
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             gray = cv2.equalizeHist(gray)
-        # t = clock()
+            # t = clock()
+            i=i+1
+            print 'run ',i,' times'
+            face_roi = vis[rects[0][1]:rects[0][3], rects[0][0]:rects[0][2]]
             rects = detect(gray, face_cascade)
         # draw_str(vis, (20, 20), 'time: %.1f ms' % (dt*1000))
         # cv2.imshow('facedetect', vis)
         # img = image_downscale(img, 400)
-        a = FindEdgeImage(vis[max((y1-y2),0):y1 + 2*y2, max((x1-x2),0):x1+2*x2])
-        midpoints = symmetryMidpoints(a,vis,x1,y1)
+        a = FindEdgeImage(img2[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
+        midpoints = symmetryMidpoints(a,img2,x,y)
         margin_size = 8
         height, width, depth  = img.shape
         img_cropped = vis[margin_size:(height-margin_size), margin_size:(width-margin_size)]
         xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img_cropped,midpoints)
+        # pdb.set_trace()
+
         # cv2.imshow('new midpoints fitline',img_cropped)
             # height, width, depth  = img_copy.shape
             # img_copy_cropped = img_copy[margin_size:(height-margin_size), margin_size:(width-margin_size)]
             #
         img_cropped = PlotPoints(midpoints,img_cropped, 0, 0)
         img_cropped = PlotPoints(a,img_cropped, 0, 0)
+
+
+        print 'Working till before perpen calc'
+        [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
+
+        # intersection_x , intersection_y is the mid point of the two eyes. Perpendicular line passes through these points
+        linePoint1 = [(intersection_x+(100*vx_perpen)),(intersection_y+100*vy_perpen)]
+        linePoint2 = [intersection_x-(100*vx_perpen),(intersection_y-100*vy_perpen)]
+
+        [leftIntersectionPoint, rightIntersectionPoint] = FaceSymmetryLineIntersection(a, linePoint1, linePoint2)
+        # leftIntersectionPoint = np.array(leftIntersectionPoint)
+        # rightIntersectionPoint = np.array(rightIntersectionPoint)
+        cv2.line(img_cropped, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
+        cv2.line(img_cropped, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
+
+
         cv2.imshow('new midpoints',img_cropped)
 
         if 0xFF & cv2.waitKey(5) == 27:
             break
-        # return x1,y1,x2,y2,img
+        # return x,y,w,h,img
     cv2.destroyAllWindows()
     cProfile.run('faceDetectionVideo.py')
-# x1,y1,x2,y2,img = faceDetectionVideo()
+# x,y,w,h,img = faceDetectionVideo()
 print 'back from func call'
