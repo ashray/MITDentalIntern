@@ -132,38 +132,38 @@ presets = dict(
     chess = 'synth:class=chess:bg=../data/lena.jpg:noise=0.1:size=640x480'
 )
 
-
-def create_capture(source = 0, fallback = presets['chess']):
-    '''source: <int> or '<int>|<filename>|synth [:<param_name>=<value> [:...]]'
-    '''
-    source = str(source).strip()
-    chunks = source.split(':')
-    # handle drive letter ('c:', ...)
-    if len(chunks) > 1 and len(chunks[0]) == 1 and chunks[0].isalpha():
-        chunks[1] = chunks[0] + ':' + chunks[1]
-        del chunks[0]
-
-    source = chunks[0]
-    try: source = int(source)
-    except ValueError: pass
-    params = dict( s.split('=') for s in chunks[1:] )
-
-    cap = None
-    if source == 'synth':
-        Class = classes.get(params.get('class', None), VideoSynthBase)
-        try: cap = Class(**params)
-        except: pass
-    else:
-        cap = cv2.VideoCapture(source)
-        if 'size' in params:
-            w, h = map(int, params['size'].split('x'))
-            cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
-            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
-    if cap is None or not cap.isOpened():
-        print 'Warning: unable to open video source: ', source
-        if fallback is not None:
-            return create_capture(fallback, None)
-    return cap
+#
+# def create_capture(source = 0, fallback = presets['chess']):
+#         '''source: <int> or '<int>|<filename>|synth [:<param_name>=<value> [:...]]'
+#     '''
+#     source = str(source).strip()
+#     chunks = source.split(':')
+#     # handle drive letter ('c:', ...)
+#     if len(chunks) > 1 and len(chunks[0]) == 1 and chunks[0].isalpha():
+#         chunks[1] = chunks[0] + ':' + chunks[1]
+#         del chunks[0]
+#
+#     source = chunks[0]
+#     try: source = int(source)
+#     except ValueError: pass
+#     params = dict( s.split('=') for s in chunks[1:] )
+#
+#     cap = None
+#     if source == 'synth':
+#         Class = classes.get(params.get('class', None), VideoSynthBase)
+#         try: cap = Class(**params)
+#         except: pass
+#     else:
+#         cap = cv2.VideoCapture(source)
+#         if 'size' in params:
+#             w, h = map(int, params['size'].split('x'))
+#             cap.set(cv2.CAP_PROP_FRAME_WIDTH, w)
+#             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+#     if cap is None or not cap.isOpened():
+#         print 'Warning: unable to open video source: ', source
+#         if fallback is not None:
+#             return create_capture(fallback, None)
+#     return cap
 
 if __name__ == '__main__':
     import sys
@@ -210,8 +210,8 @@ def find_x(y, point1, point2):
         return "Can not find intersection"
     else:
         m = (y2-y1)/(x2-x1)
-        if m==0:
-            pdb.set_trace()
+        # if m==0:
+        #     pdb.set_trace()
         x = (y-(y1-((y2-y1)/(x2-x1))*x1))/m
         return x
     # y = mx + c

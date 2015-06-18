@@ -16,7 +16,7 @@ def FindEdgeImage(img):
     margin_size = 5
     height, width  = closed_canny.shape
     closed_canny_modified = closed_canny[margin_size:(height-margin_size), margin_size:(width-margin_size)]
-    pdb.set_trace()
+    # pdb.set_trace()
     a = findBoundary(closed_canny_modified)
     return a
 
@@ -24,7 +24,7 @@ def imageDerivative(input_image):
     sobelx = cv2.Sobel(input_image,cv2.CV_64F,1,0,ksize=5)
     sobely = cv2.Sobel(input_image,cv2.CV_64F,0,1,ksize=5)
     final_image = sobelx + sobely
-    pdb.set_trace()
+    # pdb.set_trace()
     return final_image
 # storeLeftBoundaryPoints, storeRightBoundaryPoints = findBoundary(closed_canny_modified)
 #

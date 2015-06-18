@@ -39,7 +39,7 @@ if __name__ == '__main__':
     # try:
     #     video_src = video_src[0]
     # except:
-    video_src = 0
+    video_src = -1
     # args = dict(args)
     # cascade_fn = args.get('--cascade', "../../data/haarcascades/haarcascade_frontalface_alt.xml")
     # nested_fn  = args.get('--nested-cascade', "../../data/haarcascades/haarcascade_eye.xml")
@@ -47,10 +47,13 @@ if __name__ == '__main__':
     eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
     mouth_cascade = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
     nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
+    video_path = "./photo/Equal.mov"
+    cam = cv2.VideoCapture(video_path)
     i=1
     while (i>0):
         if (i==10):
-            cam = create_capture(video_src, fallback='synth:bg=../data/lena.jpg:noise=0.05')
+            # cam = create_capture(video_src, fallback='synth:bg=./photo/Equal.mov:noise=0.05')
+            # cam = create_capture(video_path)
             ret, img = cam.read()
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             gray = cv2.equalizeHist(gray)
@@ -72,21 +75,23 @@ if __name__ == '__main__':
         img2 = img.copy()
         img_copy = img.copy()
         draw_rects(vis, rects, (0, 255, 0))
-        try:
-            rects[0][0]=max(rects[0][0]-10,0)
-            rects[0][1]=max(rects[0][1]-10,0)
-            rects[0][2]=max(rects[0][2]+10,0)
-            rects[0][3]=max(rects[0][3]+10,0)
-        except IndexError:
-            rects[0][0]=0
-            rects[0][1]=0
-            rects[0][2]=0
-            rects[0][3]=0
-            print 'Face not detected'
-            break
+        # try:
+        #     rects[0][0]=max(rects[0][0]-10,0)
+        #     rects[0][1]=max(rects[0][1]-10,0)
+        #     rects[0][2]=max(rects[0][2]+10,0)
+        #     rects[0][3]=max(rects[0][3]+10,0)
+        # except IndexError:
+        #     rects[0][0]=0
+        #     rects[0][1]=0
+        #     rects[0][2]=0
+        #     rects[0][3]=0
+        #     print 'Face not detected'
+        #     break
 
         # i=0
         for x, y, w, h in rects:
+            w = w-x
+            h = h-y
             intersection_x = x + w/2
             intersection_y = y + h/2
             roi = gray[y:h, x:w]
@@ -100,7 +105,7 @@ if __name__ == '__main__':
             # gray_roi = gray[y-10:h+10,x-10:w+10]
         # pdb.set_trace()
         # dt = clock() - t
-            cam = create_capture(video_src, fallback='synth:bg=../data/lena.jpg:noise=0.05')
+        #     cam = create_capture(video_src, fallback='synth:bg=../data/lena.jpg:noise=0.05')
             ret, img = cam.read()
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             gray = cv2.equalizeHist(gray)
@@ -132,16 +137,16 @@ if __name__ == '__main__':
         [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
 
         # intersection_x , intersection_y is the mid point of the two eyes. Perpendicular line passes through these points
-        linePoint1 = [(intersection_x+(100*vx_perpen)),(intersection_y+100*vy_perpen)]
-        linePoint2 = [intersection_x-(100*vx_perpen),(intersection_y-100*vy_perpen)]
+        linePoint1 = [(intersection_x+(200*vx_perpen)),(intersection_y+200*vy_perpen)]
+        linePoint2 = [intersection_x-(200*vx_perpen),(intersection_y-200*vy_perpen)]
 
         [leftIntersectionPoint, rightIntersectionPoint] = FaceSymmetryLineIntersection(a, linePoint1, linePoint2)
         # leftIntersectionPoint = np.array(leftIntersectionPoint)
         # rightIntersectionPoint = np.array(rightIntersectionPoint)
         cv2.line(img_cropped, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
         cv2.line(img_cropped, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
-
-
+        cv2.line(img_cropped, (intersection_x,intersection_y), (intersection_x,intersection_y), (255,0,255),10)
+        pdb.set_trace()
         cv2.imshow('new midpoints',img_cropped)
 
         if 0xFF & cv2.waitKey(5) == 27:
