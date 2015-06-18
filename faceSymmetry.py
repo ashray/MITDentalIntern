@@ -5,14 +5,12 @@ from image_downscale import image_downscale
 from violaJones import *
 from canny import *
 from symmetryMidpoints import symmetryMidpoints
-from symmetryCalculation import symmetryCalculationIntensity
-# from faceDetectionVideo import faceDetectionVideo
+from symmetryCalculation import symmetryCalculationIntensity, symmetryCalculationBoundaryDifference
 
 # Accept original image as input
-img = cv2.imread('sampleFaceImage.png')
-# img = cv2.imread('./photo/images3.jpg')
-# img = cv2.imread('./photo/images-1.jpg')
 # img = cv2.imread('./photo/sampleFaceImage10.png')
+img = cv2.imread('sampleFaceImage.png')
+# img = cv2.imread('sampleFaceImage3.JPG')
 img = image_downscale(img, 400)
 img_copy = img.copy()
 img_copy_2 = img.copy()
@@ -85,11 +83,13 @@ print a.shape
 # Plot the face curve
 # img_new = PlotPoints(a,img, x, y)
 
+height, width, depth  = img_copy.shape
+img_copy_cropped = img_copy[margin_size:(height-margin_size), margin_size:(width-margin_size)]
 
 
 img_new = PlotPoints(a,img_copy_cropped, 0, 0)
 
-cv2.imshow('img', img)
+cv2.imshow('img', img_new)
 cv2.waitKey(0)
 # len_list = len(midPoint) / 2
 #
@@ -129,7 +129,8 @@ cv2.imshow('img_new_cropped', img_copy_cropped)
 
 print 'Calling percent calc'
 
-left_percentage, right_percentage = symmetryCalculationIntensity(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
+# left_percentage, right_percentage = symmetryCalculationIntensity(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
+left_percentage, right_percentage = symmetryCalculationBoundaryDifference(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
 print 'Left % = ',left_percentage,' Right % = ',right_percentage
 #percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
 #print "Percentage asymmetry ", percentageDifference * 100
