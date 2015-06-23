@@ -11,6 +11,9 @@ from symmetryMidpoints import symmetryMidpoints
 from symmetryCalculation import symmetryCalculationIntensity
 from helperFunctions import *
 
+# help_message = '''
+# USAGE: facedetect.py [--cascade <cascade_fn>] [--nested-cascade <cascade_fn>] [<video_source>]
+# '''
 
 def detect(img, cascade):
     rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
@@ -23,6 +26,7 @@ def draw_rects(img, rects, color):
     for x, y, w, h in rects:
         cv2.rectangle(img, (x, y), (w, h), color, 2)
 
+# def faceDetectionVideo():
 if __name__ == '__main__':
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
@@ -44,6 +48,16 @@ if __name__ == '__main__':
         # pdb.set_trace()
         w = w-x
         h = h-y
+        # -------------Complete the code below later to not search on full frame----------
+
+        x,y,w,h=rects[0][0],rects[0][1],rects[0][2],rects[0][3]
+        # pdb.set_trace()
+        w = w-x     # actual width
+        h = h-y     # actual height
+        face_midpoint_x = x + w/2
+        face_midpoint_y = y + h/2
+        cv2.line(vis, (face_midpoint_x,face_midpoint_y), (face_midpoint_x,face_midpoint_y), (0,0,255),10)
+
         # -------------Complete the code below later to not search on full frame----------
         # try:
         #     rects[0][0]=max(rects[0][0]-10,0)
@@ -95,6 +109,16 @@ if __name__ == '__main__':
         height, width, depth = img.shape
         # img_cropped = vis[margin_size:(height-margin_size), margin_size:(width-margin_size)]
         xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(vis,midpoints)
+
+        # another symmetry line using direction vectors of the bestfit line but passing through the face bounding box center
+        distance = 400
+        x1 = face_midpoint_x + distance * vx_temp
+        y1 = face_midpoint_y + distance * vy_temp
+
+        x2 = face_midpoint_x + (-1) * distance * vx_temp
+        y2 = face_midpoint_y + (-1) * distance * vy_temp
+        cv2.line(vis, (x1,y1), (x2,y2), (0,0,255),1)
+
         vis = PlotPoints(midpoints,vis, 0, 0)
         vis = PlotPoints(anew2,vis, 0, 0)
 
