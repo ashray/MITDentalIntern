@@ -16,6 +16,7 @@ def check_write_video(func):
 
 class Video(object):
   def __init__(self, filename, fps, w, h):
+    print 'in videoer'
     fourcc = cv2.cv.FOURCC('m', 'p', '4', 'v')
     self.filename = filename
     self.counter = 0
