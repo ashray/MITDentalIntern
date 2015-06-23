@@ -4,19 +4,12 @@ import numpy as np
 import cv2
 import cProfile
 import pdb
-# local modules
 from image_downscale import image_downscale
 from violaJones import *
 from canny import *
 from symmetryMidpoints import symmetryMidpoints
 from symmetryCalculation import symmetryCalculationIntensity
 from helperFunctions import *
-
-# help_message = '''
-# USAGE: facedetect.py [--cascade <cascade_fn>] [--nested-cascade <cascade_fn>] [<video_source>]
-# '''
-
-
 
 
 def detect(img, cascade):
@@ -30,51 +23,28 @@ def draw_rects(img, rects, color):
     for x, y, w, h in rects:
         cv2.rectangle(img, (x, y), (w, h), color, 2)
 
-# def faceDetectionVideo():
 if __name__ == '__main__':
-    # import sys, getopt
-    # # print help_message
-    # #
-    # video_src = getopt.getopt(sys.argv[1:])
-    # try:
-    #     video_src = video_src[0]
-    # except:
-    video_src = -1
-    # args = dict(args)
-    # cascade_fn = args.get('--cascade', "../../data/haarcascades/haarcascade_frontalface_alt.xml")
-    # nested_fn  = args.get('--nested-cascade', "../../data/haarcascades/haarcascade_eye.xml")
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
     mouth_cascade = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
     nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
     video_path = "./photo/Equal.mov"
     cam = cv2.VideoCapture(video_path)
-    i=1
-    while (i>0):
-        if (i==10):
-            # cam = create_capture(video_src, fallback='synth:bg=./photo/Equal.mov:noise=0.05')
-            # cam = create_capture(video_path)
-            ret, img = cam.read()
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            gray = cv2.equalizeHist(gray)
-            # t = clock()
-            rects = detect(gray, face_cascade)
-            print '10th frame captured'
-            break
-        else:
-            i=i+1
-
-    # pdb.set_trace()
-    print 'starting while'
-    # pdb.set_trace()
-
+    # Change the while True to while there are still frames to read from!!
     while True:
-        # print 'initializing x,y'
-        # x,y,w,h=rects[0][0],rects[0][1],rects[0][2],rects[0][3]
+        ret, img = cam.read()
         vis = img.copy()
         img2 = img.copy()
-        img_copy = img.copy()
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.equalizeHist(gray)
+        rects = detect(gray, face_cascade)
         draw_rects(vis, rects, (0, 255, 0))
+
+        x,y,w,h=rects[0][0],rects[0][1],rects[0][2],rects[0][3]
+        # pdb.set_trace()
+        w = w-x
+        h = h-y
+        # -------------Complete the code below later to not search on full frame----------
         # try:
         #     rects[0][0]=max(rects[0][0]-10,0)
         #     rects[0][1]=max(rects[0][1]-10,0)
@@ -87,72 +57,50 @@ if __name__ == '__main__':
         #     rects[0][3]=0
         #     print 'Face not detected'
         #     break
+        #
+        # face_roi = vis[rects[0][1]:rects[0][3], rects[0][0]:rects[0][2]]
+        # ----------------------------------------------------------------------
 
-        # i=0
-        for x, y, w, h in rects:
-            w = w-x
-            h = h-y
-            intersection_x = x + w/2
-            intersection_y = y + h/2
-            roi = gray[y:h, x:w]
-            vis_roi = vis[y:h, x:w]
-            subrects = detect(roi.copy(), eye_cascade)
-            draw_rects(vis_roi, subrects, (255, 0, 0))
-            subrects = detect(roi.copy(), nose_cascade)
-            draw_rects(vis_roi, subrects, (0, 255, 0))
-            subrects = detect(roi.copy(), mouth_cascade)
-            draw_rects(vis_roi, subrects, (0, 0, 255))
-            # gray_roi = gray[y-10:h+10,x-10:w+10]
-        # pdb.set_trace()
-        # dt = clock() - t
-        #     cam = create_capture(video_src, fallback='synth:bg=../data/lena.jpg:noise=0.05')
-            ret, img = cam.read()
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            gray = cv2.equalizeHist(gray)
-            # t = clock()
-            i=i+1
-            print 'run ',i,' times'
-            face_roi = vis[rects[0][1]:rects[0][3], rects[0][0]:rects[0][2]]
-            rects = detect(gray, face_cascade)
-        # draw_str(vis, (20, 20), 'time: %.1f ms' % (dt*1000))
-        # cv2.imshow('facedetect', vis)
-        # img = image_downscale(img, 400)
+        y_max = y+h
+
         a = FindEdgeImage(img2[max((y-h),0):y + 2*h, max((x-w),0):x+2*w])
-        midpoints = symmetryMidpoints(a,img2,x,y)
+        # a_new =
+        width,length = a.shape
+        k=0
+        anew = np.arange(width*length).reshape(width, length)
+        if width==2:
+            for g in range(length):
+                if a[1][g] > y_max or a[1][g] < y:
+                    a[1][g] = 0
+                    a[0][g] = 0
+                else:
+                    anew[1][k] = a[1][g]
+                    anew[0][k] = a[0][g]
+                    k=k+1
+        else:
+            print "Width not 2"
+            pdb.set_trace()
+
+        # CHANGE THIS CODE!!LIKE REALLY, THIS IS BAD! REALLY BAD!!!!
+        anew2 = np.arange(width*k).reshape(width, k)
+        for m in range(k):
+            anew2[1][m] = anew[1][m]
+            anew2[0][m] = anew[0][m]
         margin_size = 8
-        height, width, depth  = img.shape
-        img_cropped = vis[margin_size:(height-margin_size), margin_size:(width-margin_size)]
-        xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img_cropped,midpoints)
         # pdb.set_trace()
+        anew2 = anew2+margin_size
+        midpoints = symmetryMidpoints((anew2),img2,x,y)
+        # midpoints = midpoints + margin_size
+        # midpoints = midpoints+margin_size
+        height, width, depth = img.shape
+        # img_cropped = vis[margin_size:(height-margin_size), margin_size:(width-margin_size)]
+        xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(vis,midpoints)
+        vis = PlotPoints(midpoints,vis, 0, 0)
+        vis = PlotPoints(anew2,vis, 0, 0)
 
-        # cv2.imshow('new midpoints fitline',img_cropped)
-            # height, width, depth  = img_copy.shape
-            # img_copy_cropped = img_copy[margin_size:(height-margin_size), margin_size:(width-margin_size)]
-            #
-        img_cropped = PlotPoints(midpoints,img_cropped, 0, 0)
-        img_cropped = PlotPoints(a,img_cropped, 0, 0)
-
-
-        print 'Working till before perpen calc'
-        [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
-
-        # intersection_x , intersection_y is the mid point of the two eyes. Perpendicular line passes through these points
-        linePoint1 = [(intersection_x+(200*vx_perpen)),(intersection_y+200*vy_perpen)]
-        linePoint2 = [intersection_x-(200*vx_perpen),(intersection_y-200*vy_perpen)]
-
-        [leftIntersectionPoint, rightIntersectionPoint] = FaceSymmetryLineIntersection(a, linePoint1, linePoint2)
-        # leftIntersectionPoint = np.array(leftIntersectionPoint)
-        # rightIntersectionPoint = np.array(rightIntersectionPoint)
-        cv2.line(img_cropped, (leftIntersectionPoint[0],leftIntersectionPoint[1]), (leftIntersectionPoint[0],leftIntersectionPoint[1]), (0,255,0),10)
-        cv2.line(img_cropped, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
-        cv2.line(img_cropped, (intersection_x,intersection_y), (intersection_x,intersection_y), (255,0,255),10)
-        pdb.set_trace()
-        cv2.imshow('new midpoints',img_cropped)
+        # [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
+        cv2.imshow('new midpoints',vis)
 
         if 0xFF & cv2.waitKey(5) == 27:
             break
-        # return x,y,w,h,img
     cv2.destroyAllWindows()
-    cProfile.run('faceDetectionVideo.py')
-# x,y,w,h,img = faceDetectionVideo()
-print 'back from func call'
