@@ -2,7 +2,7 @@
 
 import numpy as np
 import cv2
-import cProfile
+import os
 import pdb
 from image_downscale import image_downscale
 from violaJones import *
@@ -10,6 +10,8 @@ from canny import *
 from symmetryMidpoints import symmetryMidpoints
 from symmetryCalculation import symmetryCalculationIntensity
 from helperFunctions import *
+from faceMorpher import *
+from docopt import docopt
 
 # help_message = '''
 # USAGE: facedetect.py [--cascade <cascade_fn>] [--nested-cascade <cascade_fn>] [<video_source>]
@@ -37,6 +39,12 @@ if __name__ == '__main__':
     # Change the while True to while there are still frames to read from!!
     while True:
         ret, img = cam.read()
+
+        cv2.imwrite('temporary_image.png',img)
+        directoryLocation = os.path.dirname(os.path.abspath(__file__))
+        imageLocation = directoryLocation + '/temporary_image.png'
+        img,points = morpher(imageLocation,  width=500, height=600, fps=10)
+
         vis = img.copy()
         img2 = img.copy()
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -54,9 +62,9 @@ if __name__ == '__main__':
         # pdb.set_trace()
         w = w-x     # actual width
         h = h-y     # actual height
-        face_midpoint_x = x + w/2
-        face_midpoint_y = y + h/2
-        cv2.line(vis, (face_midpoint_x,face_midpoint_y), (face_midpoint_x,face_midpoint_y), (0,0,255),10)
+        # face_midpoint_x = x + w/2
+        # face_midpoint_y = y + h/2
+        # cv2.line(vis, (face_midpoint_x,face_midpoint_y), (face_midpoint_x,face_midpoint_y), (0,0,255),10)
 
         # -------------Complete the code below later to not search on full frame----------
         # try:
@@ -110,21 +118,33 @@ if __name__ == '__main__':
         # img_cropped = vis[margin_size:(height-margin_size), margin_size:(width-margin_size)]
         xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(vis,midpoints)
 
-        # another symmetry line using direction vectors of the bestfit line but passing through the face bounding box center
-        distance = 400
-        x1 = face_midpoint_x + distance * vx_temp
-        y1 = face_midpoint_y + distance * vy_temp
+        # # another symmetry line using direction vectors of the bestfit line but passing through the face bounding box center
+        # distance = 400
+        # x1 = face_midpoint_x + distance * vx_temp
+        # y1 = face_midpoint_y + distance * vy_temp
+        #
+        # x2 = face_midpoint_x + (-1) * distance * vx_temp
+        # y2 = face_midpoint_y + (-1) * distance * vy_temp
+        # cv2.line(vis, (x1,y1), (x2,y2), (0,0,255),1)
 
-        x2 = face_midpoint_x + (-1) * distance * vx_temp
-        y2 = face_midpoint_y + (-1) * distance * vy_temp
-        cv2.line(vis, (x1,y1), (x2,y2), (0,0,255),1)
-
-        vis = PlotPoints(midpoints,vis, 0, 0)
+        # vis = PlotPoints(midpoints,vis, 0, 0)
         vis = PlotPoints(anew2,vis, 0, 0)
 
         # [vx_perpen,vy_perpen] = Perpendicular([vx_temp,vy_temp])
-        cv2.imshow('new midpoints',vis)
 
-        if 0xFF & cv2.waitKey(5) == 27:
-            break
+        distance = 400
+        x1 = points[56][0] + distance * vx_temp
+        y1 = points[56][1] + distance * vy_temp
+        x2 = points[56][0] + (-1) * distance * vx_temp
+        y2 = points[56][1] + (-1) * distance * vy_temp
+        cv2.line(vis, (x1,y1), (x2,y2), (0,0,255),1)
+
+        cv2.imshow('new midpoints',vis)
+        # cv2.waitKey(0)
+        os.remove(imageLocation)
+        # pdb.set_trace()
+        print 'Face landmark points', points
+        # break
+
+    #point no. 56 = nose base center point '/Users/me/Desktop/MITREDX/MITDentalIntern/photo/sampleFaceImage11.JPG'
     cv2.destroyAllWindows()
