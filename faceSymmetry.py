@@ -5,11 +5,13 @@ from image_downscale import image_downscale
 from violaJones import *
 from canny import *
 from symmetryMidpoints import symmetryMidpoints
-from symmetryCalculation import symmetryCalculationIntensity, symmetryCalculationBoundaryDifference
+from symmetryCalculation import symmetryCalculationIntensity, symmetryCalculationBoundaryDifference, symmetryCalculationLandmarkPoints
+from faceMorpher import morpher
 
 # Accept original image as input
 # img = cv2.imread('./photo/sampleFaceImage10.png')
-img = cv2.imread('sampleFaceImage.png')
+img = cv2.imread('temporary_image.png')
+imageLocation = '/Users/ashraymalhotra/Desktop/Academic/MIT Intern/temporary_image.png'
 # img = cv2.imread('sampleFaceImage3.JPG')
 img = image_downscale(img, 400)
 img_copy = img.copy()
@@ -129,12 +131,23 @@ cv2.imshow('img_new_cropped', img_copy_cropped)
 
 print 'Calling percent calc'
 
+weightageToDistance=0.8
+img,points = morpher(imageLocation,  width=500, height=600, fps=10)
+difference1, difference2 = symmetryCalculationLandmarkPoints(points, int(xbf_temp),int(ybf_temp),int(vx_temp),int(vy_temp))
+if np.mean(difference1)>0:
+    dominant = "left"
+#     Basically the distance of left is more than right, hence left is more dominant/larger
+else:
+    dominant = "right"
+print "Percentage asymmetry() " + str((weightageToDistance*np.absolute(np.mean(difference1))+(1-weightageToDistance)*np.mean(difference2)))
+print "Dominant side is " + dominant + "(Assuming strictly frontal input image)"
+# pdb.set_trace()
 # left_percentage, right_percentage = symmetryCalculationIntensity(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
-left_percentage, right_percentage = symmetryCalculationBoundaryDifference(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
-print 'Left % = ',left_percentage,' Right % = ',right_percentage
+# left_percentage, right_percentage = symmetryCalculationBoundaryDifference(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
+# print 'Left % = ',left_percentage,' Right % = ',right_percentage
 #percentageDifference = math.fabs(sum_image1[0] - sum_image2[0]) / max(sum_image1[0], sum_image2[0])
 #print "Percentage asymmetry ", percentageDifference * 100
 
 # cv2.imshow('img', img_new)
-cv2.waitKey(0)
+# cv2.waitKey(0)
 cv2.destroyAllWindows()

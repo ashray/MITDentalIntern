@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import pdb
-from IntersectionPoint import LineSegmentIntersection
+from IntersectionPoint import LineSegmentIntersection, Perpendicular, CurveLineIntersection, DistancePointLine, lineMagnitude
 from helperFunctions import find_x
 
 #Finds symmetry percentage considering face boundary and central symmetry line
@@ -221,7 +221,90 @@ def symmetryCalculationBoundaryDifference(face_boundary_points, input_img, eye_l
     pdb.set_trace()
     return negativePercentage, positivePercentage
 
+def symmetryCalculationLandmarkPoints(points, x_symmetry,y_symmetry,vx_symmetry,vy_symmetry):
+    # cv2.line(img, (points[18][0],points[18][1]), (points[18][0],points[18][1]), (255,224,0),5)
+    # cv2.line(img, (points[21][0],points[21][1]), (points[21][0],points[21][1]), (255,224,0),5)
+    # cv2.line(img, (points[22][0],points[22][1]), (points[22][0],points[22][1]), (255,224,0),5)
+    # cv2.line(img, (points[25][0],points[25][1]), (points[25][0],points[25][1]), (255,224,0),5)
+    #
+    # cv2.line(img, (points[30][0],points[30][1]), (points[30][0],points[30][1]), (255,0,0),5)
+    # cv2.line(img, (points[40][0],points[40][1]), (points[40][0],points[40][1]), (255,0,0),5)
+    #
+    # cv2.line(img, (points[54][0],points[54][1]), (points[54][0],points[54][1]), (0,255,0),5)
+    # cv2.line(img, (points[56][0],points[56][1]), (points[56][0],points[56][1]), (0,255,0),5)
+    # cv2.line(img, (points[58][0],points[58][1]), (points[58][0],points[58][1]), (0,255,0),5)
+    #
+    # cv2.line(img, (points[59][0],points[59][1]), (points[59][0],points[59][1]), (0,0,255),5)
+    # cv2.line(img, (points[65][0],points[65][1]), (points[65][0],points[65][1]), (0,0,255),5)
 
+    # Difference in landmark points
+    difference_array = []
+    difference_array2 = []
+    symmetry_point1 = np.asarray([(x_symmetry - 200 * vx_symmetry), (y_symmetry - 200 * vy_symmetry)])
+
+    symmetry_point2 = np.asarray([(x_symmetry + 200 * vx_symmetry), (y_symmetry + 200 * vy_symmetry)])
+    Dist_18 = DistancePointLine(points[18][0],points[18][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    Dist_25 = DistancePointLine(points[25][0],points[25][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    difference_array.append((Dist_18-Dist_25)/Dist_18)
+    Dist_21 = DistancePointLine(points[21][0],points[21][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    Dist_22 = DistancePointLine(points[22][0],points[22][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    difference_array.append((Dist_21-Dist_22)/Dist_21)
+    Dist_30 = DistancePointLine(points[30][0],points[30][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    Dist_40 = DistancePointLine(points[40][0],points[40][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    difference_array.append((Dist_30-Dist_40)/Dist_30)
+    Dist_58 = DistancePointLine(points[58][0],points[58][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    Dist_54 = DistancePointLine(points[54][0],points[54][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    difference_array.append((Dist_58-Dist_54)/Dist_58)
+    Dist_59 = DistancePointLine(points[59][0],points[59][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    Dist_65 = DistancePointLine(points[65][0],points[65][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
+    difference_array.append((Dist_59-Dist_65)/Dist_59)
+
+    # Difference in perpendicular projection on the symmetry line
+    temp1 = []
+    temp2 = []
+    perpendicular_vectors = Perpendicular([vx_symmetry, vy_symmetry])
+    temp1 = np.asanyarray([(points[18][0] - 200 * perpendicular_vectors[0]), (points[18][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[18][0] + 200 * perpendicular_vectors[0]), (points[18][1] + 200 * perpendicular_vectors[1])])
+    point1 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    temp1 = np.asarray([(points[25][0] - 200 * perpendicular_vectors[0]), (points[25][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[25][0] + 200 * perpendicular_vectors[0]), (points[25][1] + 200 * perpendicular_vectors[1])])
+    point2 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    difference_array2.append(lineMagnitude(point1[0], point1[1], point2[0], point2[1]))
+    temp1 = np.asarray([(points[21][0] - 200 * perpendicular_vectors[0]), (points[21][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[21][0] + 200 * perpendicular_vectors[0]), (points[21][1] + 200 * perpendicular_vectors[1])])
+    point1 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    temp1 = np.asarray([(points[22][0] - 200 * perpendicular_vectors[0]), (points[22][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[22][0] + 200 * perpendicular_vectors[0]), (points[22][1] + 200 * perpendicular_vectors[1])])
+    point2 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    difference_array2.append(lineMagnitude(point1[0], point1[1], point2[0], point2[1]))
+    temp1 = np.asarray([(points[30][0] - 200 * perpendicular_vectors[0]), (points[30][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[30][0] + 200 * perpendicular_vectors[0]), (points[30][1] + 200 * perpendicular_vectors[1])])
+    point1 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    temp1 = np.asarray([(points[40][0] - 200 * perpendicular_vectors[0]), (points[40][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[40][0] + 200 * perpendicular_vectors[0]), (points[40][1] + 200 * perpendicular_vectors[1])])
+    point2 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    difference_array2.append(lineMagnitude(point1[0], point1[1], point2[0], point2[1]))
+    temp1 = np.asarray([(points[58][0] - 200 * perpendicular_vectors[0]), (points[58][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[58][0] + 200 * perpendicular_vectors[0]), (points[58][1] + 200 * perpendicular_vectors[1])])
+    point1 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    temp1 = np.asarray([(points[54][0] - 200 * perpendicular_vectors[0]), (points[54][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[54][0] + 200 * perpendicular_vectors[0]), (points[54][1] + 200 * perpendicular_vectors[1])])
+    point2 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    difference_array2.append(lineMagnitude(point1[0], point1[1], point2[0], point2[1]))
+    temp1 = np.asarray([(points[59][0] - 200 * perpendicular_vectors[0]), (points[59][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[59][0] + 200 * perpendicular_vectors[0]), (points[59][1] + 200 * perpendicular_vectors[1])])
+    point1 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    temp1 = np.asarray([(points[65][0] - 200 * perpendicular_vectors[0]), (points[65][1] - 200 * perpendicular_vectors[1])])
+    temp2 = np.asarray([(points[65][0] + 200 * perpendicular_vectors[0]), (points[65][1] + 200 * perpendicular_vectors[1])])
+    point2 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+    difference_array2.append(lineMagnitude(point1[0], point1[1], point2[0], point2[1]))
+
+    return difference_array, difference_array2
+# 18(viewer left), 25(right) outer points of eyebrows
+# 21(left), 22(right) inner points of eyebrows
+# 30(left), 40(right) eye edge detection(towards nose)
+# 58(left), 54(right) edge points of nose
+# 59(left), 65(right) lip edge points
 
     # for i in range(0, (points_count / 2) - 1):
     #     # The above loop will run if eye_line_point1[1]< eye_line_point2[1]
