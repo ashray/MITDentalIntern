@@ -240,8 +240,9 @@ def morpher(srcpath, out_video=None, width=500, height=600, fps=10):
 
   cv2.line(img, (points[59][0],points[59][1]), (points[59][0],points[59][1]), (0,0,255),5)
   cv2.line(img, (points[65][0],points[65][1]), (points[65][0],points[65][1]), (0,0,255),5)
-  cv2.imshow("img",img)
-  cv2.waitKey(0)
+  cv2.destroyAllWindows()
+  # cv2.imshow("img",img)
+  # cv2.waitKey(0)
   video.end()
   return img, points
 

@@ -37,13 +37,34 @@ if __name__ == '__main__':
     video_path = "./photo/Equal.mov"
     cam = cv2.VideoCapture(video_path)
     # Change the while True to while there are still frames to read from!!
+    # all_points = np.arange(2*77*400).reshape(77,2,400)
+    all_points = np.zeros((77,2,1000),dtype=np.int)
+    j = -1
     while True:
         ret, img = cam.read()
-
+        j = j+1
         cv2.imwrite('temporary_image.png',img)
         directoryLocation = os.path.dirname(os.path.abspath(__file__))
         imageLocation = directoryLocation + '/temporary_image.png'
         img,points = morpher(imageLocation,  width=500, height=600, fps=10)
+
+        # a - frame number
+        # b - point number(in the 77 range)
+        # c - 0 or 1 for x and y
+        for i in range (0,77):
+            # dstack
+            cv2.line(img, (points[i][0],points[i][1]), (points[i][0],points[i][1]), (0,255,0),5)
+            all_points[i][0][j] = points[i][0]
+            all_points[i][1][j] = points[i][1]
+            # if j==1:
+            #     store_values = points
+            #     # store_values = np.dstack((store_values, points))
+            # else:
+            #     store_values = np.vstack((points, store_values))
+            # c = np.dstack(())
+            # all_points[:][0] = np.append(all_points[:][0],points[i][0])
+            # all_points[:][1] = np.append(all_points[:][1],points[i][1])
+        # all_points.astype(int)
 
         vis = img.copy()
         img2 = img.copy()
@@ -139,7 +160,7 @@ if __name__ == '__main__':
         y2 = points[56][1] + (-1) * distance * vy_temp
         cv2.line(vis, (x1,y1), (x2,y2), (0,0,255),1)
 
-        cv2.imshow('new midpoints',vis)
+        # cv2.imshow('new midpoints',vis)
         # cv2.waitKey(0)
         os.remove(imageLocation)
         # pdb.set_trace()
