@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import where, dstack, diff, meshgrid
 import math
 import pdb
 from helperFunctions import dot_product
@@ -12,18 +13,53 @@ def Perpendicular(a) :
 # line segment a given by endpoints a1, a2
 # line segment b given by endpoints b1, b2
 # return
-def LineSegmentIntersection(a1,a2, b1,b2):
+# def LineSegmentIntersection(a1,a2, b1,b2):
     # da = int(math.ceil(math.sqrt((a2[0]-a1[0])*(a2[0]-a1[0]) + (a2[1]-a1[1])*(a2[1]-a1[1]))))
     # db = int(math.ceil(math.sqrt((b2[0]-b1[0])*(b2[0]-b1[0]) + (b2[1]-b1[1])*(b2[1]-b1[1]))))
     # dp = int(math.ceil(math.sqrt((a1[0]-b1[0])*(a1[0]-b1[0]) + (a1[1]-b1[1])*(a1[1]-b1[1]))))
-    da = a2 - a1
-    db = b2 - b1
-    dp = a1 - b1
-    dap = Perpendicular(da)
-    # pdb.set_trace()
-    denom = dot_product( dap, db)
-    num = dot_product( dap, dp )
-    return (num / denom.astype(float))*db + b1
+    # da = a2 - a1
+    # db = b2 - b1
+    # dp = a1 - b1
+    # dap = Perpendicular(da)
+    # # pdb.set_trace()
+    # denom = dot_product( dap, db)
+    # num = dot_product( dap, dp )
+    # return (num / denom.astype(float))*db + b1
+# def find_intersections(A, B):
+def LineSegmentIntersection(a1,a2, b1,b2):
+    print "Debug PDB"
+    pdb.set_trace()
+    a1 = a1.reshape(1,2)
+    a2 = a2.reshape(1,2)
+    A = np.vstack((np.asarray(a1), np.asarray(a2)))
+    b1 = b1.reshape(1,2)
+    b2 = b2.reshape(1,2)
+
+    B = np.vstack((np.asarray(b1),np.asarray(b2)))
+
+    # min, max and all for arrays
+    amin = lambda x1, x2: where(x1<x2, x1, x2)
+    amax = lambda x1, x2: where(x1>x2, x1, x2)
+    aall = lambda abools: dstack(abools).all(axis=2)
+    slope = lambda line: (lambda d: d[:,1]/d[:,0])(diff(line, axis=0))
+
+    x11, x21 = meshgrid(A[:-1, 0], B[:-1, 0])
+    x12, x22 = meshgrid(A[1:, 0], B[1:, 0])
+    y11, y21 = meshgrid(A[:-1, 1], B[:-1, 1])
+    y12, y22 = meshgrid(A[1:, 1], B[1:, 1])
+
+    m1, m2 = meshgrid(slope(A), slope(B))
+    m1inv, m2inv = 1/m1, 1/m2
+
+    yi = (m1*(x21-x11-m2inv*y21) + y11)/(1 - m1*m2inv)
+    xi = (yi - y21)*m2inv + x21
+
+    xconds = (amin(x11, x12) < xi, xi <= amax(x11, x12),
+              amin(x21, x22) < xi, xi <= amax(x21, x22) )
+    yconds = (amin(y11, y12) < yi, yi <= amax(y11, y12),
+              amin(y21, y22) < yi, yi <= amax(y21, y22) )
+    pdb.set_trace()
+    return np.asarray(xi[aall(xconds)], yi[aall(yconds)])
 
 def lineMagnitude (x1, y1, x2, y2):
     lineMagnitude = math.sqrt(math.pow((x2 - x1), 2)+ math.pow((y2 - y1), 2))
