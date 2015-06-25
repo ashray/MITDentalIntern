@@ -211,6 +211,7 @@ def load_image_points(path, size):
     # cv2.line(img, (points[65][0],points[65][1]), (points[65][0],points[65][1]), (0,0,255),5)
     # cv2.imshow("img",img)
     # cv2.waitKey(0)
+    # return aligner.resize_align(img, points, size)
     return aligner.resize_align(img, points, size)
 
 def morpher(srcpath, out_video=None, width=500, height=600, fps=10):

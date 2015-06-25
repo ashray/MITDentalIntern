@@ -22,6 +22,7 @@ gray = colGray(img)
 flipped = cv2.flip(img_copy_2,1)
 cv2.imshow('flipped',flipped)
 
+print "Line 25"
 # midPoint = []
 
 # Standard face detector; returns
@@ -63,6 +64,7 @@ height, width, depth  = img.shape
 img_cropped = img[margin_size:(height-margin_size), margin_size:(width-margin_size)]
 xbf_temp, ybf_temp, vx_temp, vy_temp = draw_line(img_cropped,midpoints)
 
+print "Line 67"
 cv2.imshow('new midpoints fitline',img_cropped)
 
 # pdb.set_trace()
@@ -80,6 +82,7 @@ img = PlotPoints(midpoints,img_copy_cropped, 0, 0)
 cv2.imshow('new midpoints',img)
 cv2.waitKey(0)
 print a.shape
+print "Line 85"
 # pdb.set_trace()
 
 # Plot the face curve
@@ -129,18 +132,47 @@ cv2.line(img_copy_cropped, (leftIntersectionPoint[0],leftIntersectionPoint[1]), 
 cv2.line(img_copy_cropped, (rightIntersectionPoint[0],rightIntersectionPoint[1]), (rightIntersectionPoint[0],rightIntersectionPoint[1]), (0,255,0),10)
 cv2.imshow('img_new_cropped', img_copy_cropped)
 
-print 'Calling percent calc'
+print 'Line 135'
 
 weightageToDistance=0.8
 img,points = morpher(imageLocation,  width=500, height=600, fps=10)
-difference1, difference2 = symmetryCalculationLandmarkPoints(points, int(xbf_temp),int(ybf_temp),int(vx_temp),int(vy_temp))
+# pdb.set_trace()
+
+# difference1, difference2 = symmetryCalculationLandmarkPoints(points, int(xbf_temp),int(ybf_temp),int(vx_temp),int(vy_temp))
+xbf_temp = points[56,0]
+ybf_temp = points[56,1]
+difference1, difference2 = symmetryCalculationLandmarkPoints(points, xbf_temp,ybf_temp,vx_temp,vy_temp)
 if np.mean(difference1)>0:
     dominant = "left"
 #     Basically the distance of left is more than right, hence left is more dominant/larger
 else:
     dominant = "right"
-print "Percentage asymmetry() " + str((weightageToDistance*np.absolute(np.mean(difference1))+(1-weightageToDistance)*np.mean(difference2)))
+print "Asymmetry because of difference in distances" + str(difference1)
+print "Assymetry because of vertical missalignment " + str(difference2)
+print "Percentage asymmetry " + str((weightageToDistance*np.absolute(np.mean(difference1))+(1-weightageToDistance)*np.mean(difference2)))
 print "Dominant side is " + dominant + "(Assuming strictly frontal input image)"
+x1 = points[56,0] + (1) * 400 * vx_temp
+y1 = points[56,1] + (1) * 400 * vy_temp
+x2 = points[56,0] + (-1) * 400 * vx_temp
+y2 = points[56,1] + (-1) * 400 * vy_temp
+cv2.line(img, (x1,y1), (x2,y2), (0,0,255),1)
+
+symmetry_point1 = np.asarray([(xbf_temp - 50 * vx_temp), (ybf_temp - 50 * vy_temp)])
+symmetry_point2 = np.asarray([(xbf_temp + 50 * vx_temp), (ybf_temp + 50 * vy_temp)])
+perpendicular_vectors = Perpendicular([vx_temp, vy_temp])
+temp1 = np.asarray([(points[59][0] - 200 * perpendicular_vectors[0]), (points[59][1] - 200 * perpendicular_vectors[1])])
+temp2 = np.asarray([(points[59][0] + 200 * perpendicular_vectors[0]), (points[59][1] + 200 * perpendicular_vectors[1])])
+point1 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+temp1 = np.asarray([(points[65][0] - 200 * perpendicular_vectors[0]), (points[65][1] - 200 * perpendicular_vectors[1])])
+temp2 = np.asarray([(points[65][0] + 200 * perpendicular_vectors[0]), (points[65][1] + 200 * perpendicular_vectors[1])])
+point2 = LineSegmentIntersection(temp1, temp2, symmetry_point1, symmetry_point2)
+cv2.line(img, (point1[0],point1[1]), (point1[0],point1[1]), (0,255,255),1)
+cv2.line(img, (point2[0],point2[1]), (point2[0],point2[1]), (0,255,255),1)
+# cv2.line(img, (symmetry_point1[0],symmetry_point1[1]), (symmetry_point1[0],symmetry_point1[1]), (0,255,255),10)
+# cv2.line(img, (symmetry_point2[0],symmetry_point2[1]), (symmetry_point2[0],symmetry_point2[1]), (0,255,255),10)
+# cv2.line(img, (point2[0],point2[1]), (point2[0],point2[1]), (0,255,255),10)
+
+cv2.imshow("Image with landmark points", img)
 # pdb.set_trace()
 # left_percentage, right_percentage = symmetryCalculationIntensity(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
 # left_percentage, right_percentage = symmetryCalculationBoundaryDifference(a,img_copy_2,leftIntersectionPoint,rightIntersectionPoint,xbf_temp,ybf_temp,vx_temp,vy_temp)
@@ -149,5 +181,5 @@ print "Dominant side is " + dominant + "(Assuming strictly frontal input image)"
 #print "Percentage asymmetry ", percentageDifference * 100
 
 # cv2.imshow('img', img_new)
-# cv2.waitKey(0)
+cv2.waitKey(0)
 cv2.destroyAllWindows()

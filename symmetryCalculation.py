@@ -241,8 +241,8 @@ def symmetryCalculationLandmarkPoints(points, x_symmetry,y_symmetry,vx_symmetry,
     difference_array = []
     difference_array2 = []
     symmetry_point1 = np.asarray([(x_symmetry - 200 * vx_symmetry), (y_symmetry - 200 * vy_symmetry)])
-
     symmetry_point2 = np.asarray([(x_symmetry + 200 * vx_symmetry), (y_symmetry + 200 * vy_symmetry)])
+    # pdb.set_trace()
     Dist_18 = DistancePointLine(points[18][0],points[18][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
     Dist_25 = DistancePointLine(points[25][0],points[25][1], symmetry_point1[0], symmetry_point1[1], symmetry_point2[0], symmetry_point2[1])
     difference_array.append((Dist_18-Dist_25)/Dist_18)
@@ -262,6 +262,7 @@ def symmetryCalculationLandmarkPoints(points, x_symmetry,y_symmetry,vx_symmetry,
     # Difference in perpendicular projection on the symmetry line
     temp1 = []
     temp2 = []
+    print "Line 265 symmetryCal"
     perpendicular_vectors = Perpendicular([vx_symmetry, vy_symmetry])
     temp1 = np.asanyarray([(points[18][0] - 200 * perpendicular_vectors[0]), (points[18][1] - 200 * perpendicular_vectors[1])])
     temp2 = np.asarray([(points[18][0] + 200 * perpendicular_vectors[0]), (points[18][1] + 200 * perpendicular_vectors[1])])
