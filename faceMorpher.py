@@ -35,6 +35,8 @@
 # import locator
 # import aligner
 # # import warper
+
+
 # # import blender
 # # import plotter
 # import videoer
@@ -182,7 +184,7 @@ import videoer
 import cv2
 
 def load_image_points(path, size):
-  print 'in load image points'
+  # print 'in load image points'
   img = scipy.ndimage.imread(path)[..., :3]
   points = locator.face_points(path)
   if len(points) == 0:
@@ -220,10 +222,10 @@ def morpher(srcpath, out_video=None, width=500, height=600, fps=10):
 
   :param imgpaths: array or generator of image paths
   """
-  print 'in morpher'
+  # print 'in morpher'
 
   video = videoer.Video(out_video, fps, width, height)
-  print 'source path',srcpath
+  # print 'source path',srcpath
   img, points = load_image_points(srcpath, (height, width))
   cv2.line(img, (points[18][0],points[18][1]), (points[18][0],points[18][1]), (255,224,0),5)
   cv2.line(img, (points[21][0],points[21][1]), (points[21][0],points[21][1]), (255,224,0),5)
