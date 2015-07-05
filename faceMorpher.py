@@ -185,6 +185,8 @@ def load_image_points(path, size):
   print 'in load image points'
   # img = scipy.ndimage.imread(path)[..., :3]
   img = cv2.imread(path)[..., :3]
+  # print 'in load image points'
+  img = scipy.ndimage.imread(path)[..., :3]
   points = locator.face_points(path)
   if len(points) == 0:
     print 'No face in %s' % path
