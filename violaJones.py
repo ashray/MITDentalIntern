@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#!/usr/local/bin/python
 import numpy as np
 import cv2
 import pdb
@@ -31,7 +32,7 @@ def faceFeatureDetector(img):
     for (x, y, w, h) in faces:
         count_face = count_face + 1
         if count_face == 1:
-            cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             midPoint.append(x + w / 2)
             midPoint.append(y + h / 2)
             print midPoint[0:len(midPoint)]
@@ -49,7 +50,7 @@ def faceFeatureDetector(img):
             temp2 = 0
 
             for (ex, ey, ew, eh) in eyes:
-                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+                # cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
                 temp1 = temp1 + ex + ew / 2
                 temp2 = temp2 + ey + eh / 2
                 count = count + 1
@@ -76,7 +77,7 @@ def faceFeatureDetector(img):
                 count_mouth = count_mouth + 1
 
             if count_mouth == 1:
-                cv2.rectangle(roi_color, (mx, my), (mx + mw, my + mh), (0, 0, 255), 2)
+                # cv2.rectangle(roi_color, (mx, my), (mx + mw, my + mh), (0, 0, 255), 2)
                 midPoint.append(mx + mw / 2 + x)
                 midPoint.append(my + mh / 2 + y)
                 curr_len = len(midPoint)
@@ -92,7 +93,7 @@ def faceFeatureDetector(img):
                 count_nose = count_nose + 1
 
             if count_nose == 1:
-                cv2.rectangle(roi_color, (nx, ny), (nx + nw, ny + nh), (0, 255, 0), 2)
+                # cv2.rectangle(roi_color, (nx, ny), (nx + nw, ny + nh), (0, 255, 0), 2)
                 midPoint.append(nx + nw / 2 + x)
                 midPoint.append(ny + nh / 2 + y)
                 curr_len = len(midPoint)

@@ -183,7 +183,8 @@ import cv2
 
 def load_image_points(path, size):
   print 'in load image points'
-  img = scipy.ndimage.imread(path)[..., :3]
+  # img = scipy.ndimage.imread(path)[..., :3]
+  img = cv2.imread(path)[..., :3]
   points = locator.face_points(path)
   if len(points) == 0:
     print 'No face in %s' % path
@@ -214,16 +215,16 @@ def load_image_points(path, size):
     # return aligner.resize_align(img, points, size)
     return aligner.resize_align(img, points, size)
 
-def morpher(srcpath, out_video=None, width=500, height=600, fps=10):
+def landmark_locator(srcpath, out_video=None, width=500, height=600, fps=10):
   """
   Create a morph sequence from multiple images in imgpaths
 
   :param imgpaths: array or generator of image paths
   """
-  print 'in morpher'
+  # print 'in morpher'
 
   video = videoer.Video(out_video, fps, width, height)
-  print 'source path',srcpath
+  # print 'source path',srcpath
   img, points = load_image_points(srcpath, (height, width))
   cv2.line(img, (points[18][0],points[18][1]), (points[18][0],points[18][1]), (255,224,0),5)
   cv2.line(img, (points[21][0],points[21][1]), (points[21][0],points[21][1]), (255,224,0),5)
@@ -235,9 +236,9 @@ def morpher(srcpath, out_video=None, width=500, height=600, fps=10):
   cv2.line(img, (points[39][0],points[39][1]), (points[39][0],points[39][1]), (255,0,0),5)
   cv2.line(img, (points[40][0],points[40][1]), (points[40][0],points[40][1]), (255,0,0),5)
 
-  cv2.line(img, (points[54][0],points[54][1]), (points[54][0],points[54][1]), (0,255,0),5)
-  cv2.line(img, (points[56][0],points[56][1]), (points[56][0],points[56][1]), (0,255,0),5)
-  cv2.line(img, (points[58][0],points[58][1]), (points[58][0],points[58][1]), (0,255,0),5)
+  # cv2.line(img, (points[54][0],points[54][1]), (points[54][0],points[54][1]), (0,255,0),5)
+  # cv2.line(img, (points[56][0],points[56][1]), (points[56][0],points[56][1]), (0,255,0),5)
+  # cv2.line(img, (points[58][0],points[58][1]), (points[58][0],points[58][1]), (0,255,0),5)
 
   cv2.line(img, (points[59][0],points[59][1]), (points[59][0],points[59][1]), (0,0,255),5)
   cv2.line(img, (points[65][0],points[65][1]), (points[65][0],points[65][1]), (0,0,255),5)
