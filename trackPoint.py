@@ -97,9 +97,7 @@ while j < frame_limit:
     # x[1][0].append(points[poi[1]][0])
     # y[1][1].append(points[poi[1]][1])
 
-
     print j, x[0][0] #, y[0][1], x[1][0], y[1][1]
-
 
     # line, = plt.plot(points[poi[0]][0], points[poi[0]][1], 'bo-')
     # plt.setp(line, color='r', linewidth=2.0, solid_joinstyle='round')
