@@ -6,7 +6,7 @@ CodeArchive/*
 *.JPG
 *.jpeg
 *.pyc
-*.npy
+*.mov.npy
 
 # Compiled source #
 ###################
