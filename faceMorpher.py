@@ -182,7 +182,7 @@ import videoer
 import cv2
 
 def load_image_points(path, size):
-  print 'in load image points'
+  # print 'in load image points'
   # img = scipy.ndimage.imread(path)[..., :3]
   img = cv2.imread(path)[..., :3]
   # print 'in load image points'
@@ -228,23 +228,23 @@ def landmark_locator(srcpath, out_video=None, width=500, height=600, fps=10):
   video = videoer.Video(out_video, fps, width, height)
   # print 'source path',srcpath
   img, points = load_image_points(srcpath, (height, width))
-  cv2.line(img, (points[18][0],points[18][1]), (points[18][0],points[18][1]), (255,224,0),5)
-  cv2.line(img, (points[21][0],points[21][1]), (points[21][0],points[21][1]), (255,224,0),5)
-  cv2.line(img, (points[22][0],points[22][1]), (points[22][0],points[22][1]), (255,224,0),5)
-  cv2.line(img, (points[25][0],points[25][1]), (points[25][0],points[25][1]), (255,224,0),5)
-
-  cv2.line(img, (points[30][0],points[30][1]), (points[30][0],points[30][1]), (255,0,0),5)
-  cv2.line(img, (points[38][0],points[38][1]), (points[38][0],points[38][1]), (255,0,0),5)
-  cv2.line(img, (points[39][0],points[39][1]), (points[39][0],points[39][1]), (255,0,0),5)
-  cv2.line(img, (points[40][0],points[40][1]), (points[40][0],points[40][1]), (255,0,0),5)
-
-  # cv2.line(img, (points[54][0],points[54][1]), (points[54][0],points[54][1]), (0,255,0),5)
-  # cv2.line(img, (points[56][0],points[56][1]), (points[56][0],points[56][1]), (0,255,0),5)
-  # cv2.line(img, (points[58][0],points[58][1]), (points[58][0],points[58][1]), (0,255,0),5)
-
-  cv2.line(img, (points[59][0],points[59][1]), (points[59][0],points[59][1]), (0,0,255),5)
-  cv2.line(img, (points[65][0],points[65][1]), (points[65][0],points[65][1]), (0,0,255),5)
-  cv2.destroyAllWindows()
+  # cv2.line(img, (points[18][0],points[18][1]), (points[18][0],points[18][1]), (255,224,0),5)
+  # cv2.line(img, (points[21][0],points[21][1]), (points[21][0],points[21][1]), (255,224,0),5)
+  # cv2.line(img, (points[22][0],points[22][1]), (points[22][0],points[22][1]), (255,224,0),5)
+  # cv2.line(img, (points[25][0],points[25][1]), (points[25][0],points[25][1]), (255,224,0),5)
+  #
+  # cv2.line(img, (points[30][0],points[30][1]), (points[30][0],points[30][1]), (255,0,0),5)
+  # cv2.line(img, (points[38][0],points[38][1]), (points[38][0],points[38][1]), (255,0,0),5)
+  # cv2.line(img, (points[39][0],points[39][1]), (points[39][0],points[39][1]), (255,0,0),5)
+  # cv2.line(img, (points[40][0],points[40][1]), (points[40][0],points[40][1]), (255,0,0),5)
+  #
+  # # cv2.line(img, (points[54][0],points[54][1]), (points[54][0],points[54][1]), (0,255,0),5)
+  # # cv2.line(img, (points[56][0],points[56][1]), (points[56][0],points[56][1]), (0,255,0),5)
+  # # cv2.line(img, (points[58][0],points[58][1]), (points[58][0],points[58][1]), (0,255,0),5)
+  #
+  # cv2.line(img, (points[59][0],points[59][1]), (points[59][0],points[59][1]), (0,0,255),5)
+  # cv2.line(img, (points[65][0],points[65][1]), (points[65][0],points[65][1]), (0,0,255),5)
+  # cv2.destroyAllWindows()
   # cv2.imshow("img",img)
   # cv2.waitKey(0)
   video.end()

@@ -62,7 +62,7 @@ if __name__ == '__main__':
             cv2.imwrite('temporary_image.png',img)
             directoryLocation = os.path.dirname(os.path.abspath(__file__))
             imageLocation = directoryLocation + '/temporary_image.png'
-            img,points = morpher(imageLocation,  width=500, height=600, fps=10)
+            img,points = landmark_locator(imageLocation,  width=500, height=600, fps=10)
             #eyebrows
             cv2.line(img, (points[18][0],points[18][1]), (points[18][0],points[18][1]), (255,224,0),5)
             cv2.line(img, (points[21][0],points[21][1]), (points[21][0],points[21][1]), (255,224,0),5)
