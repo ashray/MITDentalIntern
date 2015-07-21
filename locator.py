@@ -29,7 +29,7 @@ def face_points(imgpath, add_boundary_points=True):
   """
   directory = path.dirname(path.realpath(__file__))
   stasm_path = path.join(directory, 'bin/stasm_util')
-  data_folder = path.join(directory, 'data')  # data = haar cascade xmls
+  data_folder = path.join(directory, 'haarcascades')  # data = haar cascade xmls
   command = '"{0}" -f "{1}" "{2}"'.format(stasm_path, data_folder, imgpath)
   s = subprocess.check_output(command, shell=True)
   if s.startswith('No face found'):

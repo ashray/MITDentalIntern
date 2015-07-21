@@ -2,6 +2,7 @@
 
 import numpy as np
 import cv2
+import time
 import os
 import pdb
 from image_downscale import image_downscale
@@ -40,11 +41,13 @@ if __name__ == '__main__':
 #     "R1.mov",
 # ]
     for loop_iterator in range(1):
-        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-        eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-        mouth_cascade = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
-        nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
+        face_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_frontalface_default.xml')
+        eye_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_eye.xml')
+        mouth_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_mcs_mouth.xml')
+        nose_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_mcs_nose.xml')
+        print 'Loading path'
         video_path = "/Users/me/Desktop/MITREDX/MITDentalIntern/photo/" + array_name[loop_iterator]
+        print 'Reading video'
         cam = cv2.VideoCapture(video_path)
         # Change the while True to while there are still frames to read from!!
         # all_points = np.arange(2*77*400).reshape(77,2,400)
@@ -107,7 +110,8 @@ if __name__ == '__main__':
 
             cv2.line(img, (x3, y3), (x2, y2), (255, 0, 0), 1)
             cv2.imshow("img",img)
-
+            time.sleep(1)
+            cv2.destroyAllWindows()
 
             # a - point number(in the 77 range)
             # b - 0 or 1 for x and y
@@ -235,6 +239,6 @@ if __name__ == '__main__':
             # break
 
     #point no. 56 = nose base center point '/Users/me/Desktop/MITREDX/MITDentalIntern/photo/sampleFaceImage11.JPG'
-    pdb.set_trace()
-    cv2.destroyAllWindows()
+    # pdb.set_trace()
+    # cv2.destroyAllWindows()
 

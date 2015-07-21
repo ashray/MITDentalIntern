@@ -1,5 +1,7 @@
 """
 Align face and image sizes
+Input from Stasm, an image captured from the webcam
+Output a resized image, focussing on face
 """
 from __future__ import division
 import cv2

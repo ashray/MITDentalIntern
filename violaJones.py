@@ -18,10 +18,10 @@ def faceFeatureDetector(img):
     gray = colGray(img)
     count_face, count_mouth, count_nose, count = 0, 0, 0, 0
     midPoint = []
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-    mouth_cascade = cv2.CascadeClassifier('haarcascade_mcs_mouth.xml')
-    nose_cascade = cv2.CascadeClassifier('haarcascade_mcs_nose.xml')
+    face_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_frontalface_default.xml')
+    eye_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_eye.xml')
+    mouth_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_mcs_mouth.xml')
+    nose_cascade = cv2.CascadeClassifier('./haarcascades/haarcascade_mcs_nose.xml')
 
     # eye_cascade = cv2.CascadeClassifier('eyes22x5.xml')
     # mouth_cascade = cv2.CascadeClassifier('mouth.xml')

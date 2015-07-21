@@ -5,10 +5,12 @@ import matplotlib.pyplot as plt
 import os
 
 
-videoLocation_r = '/Users/me/Desktop/MITDentalData/Videos/9r.mov'
-videoLocation_l = '/Users/me/Desktop/MITDentalData/Videos/9l.mov'
-cam_r = cv2.VideoCapture(videoLocation_r)
-cam_l = cv2.VideoCapture(videoLocation_l)
+# videoLocation_r = '/Users/me/Desktop/MITDentalData/Videos/9r.mov'
+# videoLocation_l = '/Users/me/Desktop/MITDentalData/Videos/9l.mov'
+
+videoLocation = '/Users/me/Desktop/MITDentalData/Videos/'
+# cam_r = cv2.VideoCapture(videoLocation_r)
+# cam_l = cv2.VideoCapture(videoLocation_l)
 frame_limit,j = 80,0
 frame_limit = int(cam_r.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
 poi = [59, 8]#poi[0], poi[1]
